@@ -1,4 +1,4 @@
-<div class="mqsec">
+ <!-- <div class="mqsec">
    <div class="mqtrack">
       <div class="mqitem"><i class="fas fa-circle"></i>Crispy Fried Chicken</div>
       <div class="mqitem"><i class="fas fa-circle"></i>Gourmet Burgers</div>
@@ -14,5 +14,14 @@
       <div class="mqitem"><i class="fas fa-circle"></i>Loaded Fries</div>
       <div class="mqitem"><i class="fas fa-circle"></i>Ice Cream Shakes</div>
       <div class="mqitem"><i class="fas fa-circle"></i>Grilled Sandwiches</div>
+   </div>
+</div>  -->
+
+
+<div class="mqsec">
+   <div class="mqtrack">
+      @for (item of Marquee(); track $index) {
+      <div class="mqitem"><i class="fas fa-circle"></i>{{item.marqueeItem}}</div>
+      }
    </div>
 </div>

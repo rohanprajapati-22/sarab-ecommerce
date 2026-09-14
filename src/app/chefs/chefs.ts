@@ -22,13 +22,11 @@ ngOnInit() {
 getChefData() {
   this.service.getChefsData().subscribe({
     next: (items) => {
-      console.log('Chef API Response:', items);
       // this.cdr.detectChanges();
 
       // this.chefs = items;
        this.chefs.set(items);
 
-      console.log('Chefs Array:', this.chefs);
       //  this.cdr.detectChanges();
     },
     error: (err) => {

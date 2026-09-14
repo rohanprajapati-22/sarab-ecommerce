@@ -54,4 +54,8 @@ export class MenuService {
   getChefsData(): Observable<any[]>{
     return this.http.get<any[]>(`/api/chef`);
   }
+
+  getMarqueeItem():Observable<any[]>{
+    return this.http.get<any[]>(`/api/Menu/GetMarquee`);
+  }
 }

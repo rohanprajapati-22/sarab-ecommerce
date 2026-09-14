@@ -1,0 +1,60 @@
+<section class="cart-page">
+   <div class="container">
+      <div class="cart-head">
+         <div>
+            <h2 class="cart-title">Shopping Cart</h2>
+            <p class="cart-sub">Review the items you added to your cart</p>
+         </div>
+         <button class="btn-back" (click)="goHome()"><i class="fas fa-arrow-left"></i> Continue Shopping</button>
+      </div>
+
+      @if (checkoutDone()) {
+         <div class="cart-checkout-msg">
+            <i class="fas fa-check-circle" style="color:var(--green)"></i>
+            <h3>Order Placed!</h3>
+            <p>Thank you for your order. We will prepare it fresh for you.</p>
+            <button class="btn-primary-sm" (click)="goHome()">Back to Home</button>
+         </div>
+      } @else if (items.length === 0) {
+         <div class="cart-empty">
+            <i class="fas fa-shopping-cart" style="color:var(--secondary)"></i>
+            <h3>Your cart is empty</h3>
+            <p>Looks like you haven't added any items yet.</p>
+            <button class="btn-primary-lg" (click)="goHome()"><i class="fas fa-utensils"></i> Browse Menu</button>
+         </div>
+      } @else {
+         <div class="cart-layout">
+            <div class="cart-list">
+               @for (ci of items; track ci.item.title) {
+                  <div class="cart-item">
+                     <img [src]="ci.item.image" [alt]="ci.item.title" class="cart-img" />
+                     <div class="cart-info">
+                        <div class="cart-cat">{{ ci.item.category }}</div>
+                        <div class="cart-name">{{ ci.item.title }}</div>
+                        <div class="cart-price">
+                           {{ ui.formatPrice(ci.item.price) }}
+                           @if (ci.item.oldPrice) { <span class="cart-old">{{ ui.formatPrice(ci.item.oldPrice) }}</span> }
+                        </div>
+                     </div>
+                     <div class="cart-qty">
+                        <button class="qty-btn" (click)="changeQty(ci, -1)"><i class="fas fa-minus"></i></button>
+                        <span class="qty-val">{{ ci.qty }}</span>
+                        <button class="qty-btn" (click)="changeQty(ci, 1)"><i class="fas fa-plus"></i></button>
+                     </div>
+                     <div class="cart-line">{{ lineTotal(ci) }}</div>
+                     <button class="cart-remove" (click)="remove(ci.item.title)" title="Remove item"><i class="fas fa-trash-alt"></i></button>
+                  </div>
+               }
+            </div>
+            <div class="cart-summary">
+               <h3>Order Summary</h3>
+               <div class="sum-row"><span>Items ({{ ui.cartCount() }})</span><span>{{ subtotal }}</span></div>
+               <div class="sum-row"><span>Delivery</span><span>Free</span></div>
+               <div class="sum-row sum-total"><span>Total</span><span>{{ total }}</span></div>
+               <button class="btn-checkout" (click)="checkout()"><i class="fas fa-credit-card"></i> Proceed to Checkout</button>
+               <button class="btn-clear" (click)="clear()"><i class="fas fa-trash-alt"></i> Clear Cart</button>
+            </div>
+         </div>
+      }
+   </div>
+</section>

@@ -1,25 +1,9 @@
-import { Component, AfterViewInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Navbar } from './navbar/navbar';
 import { SearchOverlay } from './search-overlay/search-overlay';
-import { Hero } from './hero/hero';
-import { Marquee } from './marquee/marquee';
-import { Category } from './category/category';
-import { About } from './about/about';
-import { Menu } from './menu/menu';
 import { MenuPopup } from './menu-popup/menu-popup';
-import { SpecialOffer } from './special-offer/special-offer';
-import { Gallery } from './gallery/gallery';
 import { GalleryPopup } from './gallery-popup/gallery-popup';
-import { History } from './history/history';
-import { Chefs } from './chefs/chefs';
-import { Hours } from './hours/hours';
-import { Testimonials } from './testimonials/testimonials';
-import { Reservation } from './reservation/reservation';
-import { Blog } from './blog/blog';
-import { Newsletter } from './newsletter/newsletter';
-import { Contact } from './contact/contact';
-import { Footer } from './footer/footer';
 import { CartFloating } from './cart-floating/cart-floating';
 import { BackToTop } from './back-to-top/back-to-top';
 import { UiService } from './ui.service';
@@ -30,32 +14,17 @@ declare const AOS: any;
   imports: [
     Navbar,
     SearchOverlay,
-    Hero,
-    Marquee,
-    Category,
-    About,
-    Menu,
     MenuPopup,
-    SpecialOffer,
-    Gallery,
     GalleryPopup,
-    History,
-    Chefs,
-    Hours,
-    Testimonials,
-    Reservation,
-    Blog,
-    Newsletter,
-    Contact,
-    Footer,
     CartFloating,
     BackToTop,
+    RouterOutlet,
   ],
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',
 })
-export class App implements AfterViewInit, OnDestroy {
+export class App {
   private lastScrollY = 0;
   private clickHandler = (e: Event) => this.onAnchorClick(e);
 

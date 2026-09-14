@@ -37,7 +37,7 @@ export class Hero implements AfterViewInit, OnDestroy {
       const element = el as HTMLElement;
       const originalText = element.textContent || '';
       const finalNumber = parseInt(originalText, 10);
-      const suffix = originalText.replace(/[0-9]/g, ''); // keeps "+" or "yr"
+      const suffix = originalText.replace(/[0-9]/g, '');
 
       if (isNaN(finalNumber)) return;
 

@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, computed } from '@angular/core';
 
 export interface MenuItem {
   category: string;
@@ -21,22 +21,46 @@ export interface GalleryItem {
   desc: string;
 }
 
-@Injectable({ providedIn: 'root' })
+export interface CartItem {
+  item: MenuItem;
+  qty: number;
+}
+
+@Injectable({ 
+  providedIn: 'root'
+ })
 export class UiService {
-  // Signals give all components live access to shared UI state.
+  
   readonly searchOpen = signal<boolean>(false);
   readonly menuPopupOpen = signal<boolean>(false);
   readonly galleryPopupOpen = signal<boolean>(false);
   readonly selectedItem = signal<MenuItem | null>(null);
   readonly galleryItems = signal<GalleryItem[]>([]);
   readonly galleryIndex = signal<number>(0);
-  readonly cartCount = signal<number>(0);
+  readonly cartItems = signal<CartItem[]>([]);
+  readonly cartCount = computed<number>(() =>
+    this.cartItems().reduce((sum, ci) => sum + ci.qty, 0)
+  );
+  readonly cartTotal = computed<number>(() =>
+    this.cartItems().reduce((sum, ci) => sum + this.parsePrice(ci.item.price) * ci.qty, 0)
+  );
   readonly activeCategory = signal<string>('all');
+
+  private static readonly CART_STORAGE_KEY = 'sarab_cart_items';
 
   constructor() {
     if (typeof window !== 'undefined' && window.localStorage) {
-      const c = window.localStorage.getItem('sarab_cart');
-      if (c) this.cartCount.set(parseInt(c, 10) || 0);
+      const raw = window.localStorage.getItem(UiService.CART_STORAGE_KEY);
+      if (raw) {
+        try {
+          const parsed: CartItem[] = JSON.parse(raw);
+          this.cartItems.set(
+            parsed.filter((ci) => !!ci && !!ci.item && typeof ci.item.title === 'string')
+          );
+        } catch {
+          this.cartItems.set([]);
+        }
+      }
     }
   }
 
@@ -71,10 +95,49 @@ export class UiService {
     this.lockScroll(false);
   }
 
-  addToCart(qty: number) {
-    this.cartCount.update((count) => count + qty);
-    if (window.localStorage) {
-      window.localStorage.setItem('sarab_cart', String(this.cartCount()));
+  parsePrice(price: string | number): number {
+    return parseFloat(String(price).replace(/[^0-9.]/g, '')) || 0;
+  }
+
+  formatPrice(price: string | number): string {
+    const s = String(price);
+    return /[$€£₹]/.test(s) ? s : '$' + s;
+  }
+
+  addToCart(item: MenuItem, qty: number) {
+    this.cartItems.update((items) => {
+      const existing = items.find((ci) => ci.item.title === item.title);
+      if (existing) {
+        return items.map((ci) =>
+          ci.item.title === item.title ? { ...ci, qty: ci.qty + qty } : ci
+        );
+      }
+      return [...items, { item, qty }];
+    });
+    this.persistCart();
+  }
+
+  updateQty(title: string, qty: number) {
+    if (qty < 1) qty = 1;
+    this.cartItems.update((items) =>
+      items.map((ci) => (ci.item.title === title ? { ...ci, qty } : ci))
+    );
+    this.persistCart();
+  }
+
+  removeItem(title: string) {
+    this.cartItems.update((items) => items.filter((ci) => ci.item.title !== title));
+    this.persistCart();
+  }
+
+  clearCart() {
+    this.cartItems.set([]);
+    this.persistCart();
+  }
+
+  private persistCart() {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.setItem(UiService.CART_STORAGE_KEY, JSON.stringify(this.cartItems()));
     }
   }
 

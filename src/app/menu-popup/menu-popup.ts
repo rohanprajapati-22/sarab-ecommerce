@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, effect } from '@angular/core';
 import { UiService, MenuItem } from '../ui.service';
 
 @Component({
@@ -11,7 +11,13 @@ import { UiService, MenuItem } from '../ui.service';
 export class MenuPopup {
   qty = 1;
 
-  constructor(public ui: UiService) {}
+  constructor(public ui: UiService) {
+    effect(() => {
+      if (this.ui.menuPopupOpen()) {
+        this.qty = 1;
+      }
+    });
+  }
 
   // Read directly from the service signals in the template
   get item(): MenuItem | null {
@@ -44,7 +50,8 @@ export class MenuPopup {
   }
 
   addCart() {
-    this.ui.addToCart(this.qty);
+    if (!this.item) return;
+    this.ui.addToCart(this.item, this.qty);
     const btn = document.getElementById('mpAddCart');
     if (btn) {
       btn.innerHTML = '<i class="fas fa-check"></i> Added to Cart!';

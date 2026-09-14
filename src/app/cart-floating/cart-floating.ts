@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { UiService } from '../ui.service';
 
 @Component({
@@ -9,15 +10,13 @@ import { UiService } from '../ui.service';
   standalone: true,
 })
 export class CartFloating {
-  constructor(public ui: UiService) {}
+  constructor(public ui: UiService, private router: Router) {}
 
-  // Show the live cart count from the shared service
   get count(): number {
     return this.ui.cartCount();
   }
 
-  scrollToMenu() {
-    const menu = document.getElementById('menu');
-    if (menu) window.scrollTo({ top: menu.offsetTop - 80, behavior: 'smooth' });
+  openCart() {
+    this.router.navigate(['/cart']);
   }
 }
