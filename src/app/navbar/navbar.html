@@ -1,0 +1,51 @@
+<div id="topbar">
+   <div class="container">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+         <div class="top-contact d-flex flex-wrap">
+            <span><i class="fas fa-phone-alt"></i>+1 (800) 123-4567</span>
+            <span><i class="fas fa-envelope"></i>hello&#64;sarabfood.com</span>
+            <span><i class="fas fa-map-marker-alt"></i>42 Flavor Street, NY</span>
+         </div>
+         <div class="d-flex align-items-center gap-3">
+            <span class="ttag"><i class="fas fa-fire me-1"></i>Free Delivery Today!</span>
+            <div class="tsoc">
+               <a href="#"><i class="fab fa-facebook-f"></i></a>
+               <a href="#"><i class="fab fa-instagram"></i></a>
+               <a href="#"><i class="fab fa-tiktok"></i></a>
+               <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<nav class="navbar navbar-expand-lg" id="nav">
+   <div class="container">
+      <a class="navbar-brand" href="#hero">
+         <div class="blogo">
+            <div class="bico"><i class="fas fa-utensils"></i></div>
+            <div>
+               <div class="bname">Sar<span>ab</span></div>
+               <div class="bsub">Fast Food &amp; Restaurant</div>
+            </div>
+         </div>
+      </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu" (click)="toggleNav()">
+      <i class="fas fa-bars" style="color:var(--primary);font-size:1.35rem;"></i>
+      </button>
+      <div class="collapse navbar-collapse" [class.show]="navOpen" id="navmenu">
+         <ul class="navbar-nav mx-auto">
+            <li class="nav-item"><a class="nav-link active" href="#hero">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="#menu">Menu</a></li>
+            <li class="nav-item"><a class="nav-link" href="#chefs">Chefs</a></li>
+            <li class="nav-item"><a class="nav-link" href="#reservation">Reservation</a></li>
+            <li class="nav-item"><a class="nav-link" href="#testimonials">Reviews</a></li>
+            <li class="nav-item"><a class="nav-link" href="#contact-section">Contact</a></li>
+         </ul>
+         <div class="d-flex align-items-center gap-1">
+            <button id="navSearchBtn" title="Search" (click)="openSearch()"><i class="fas fa-search"></i></button>
+            <a href="#menu" class="nav-link nav-cta"><i class="fas fa-shopping-bag me-1"></i>Order Now</a>
+         </div>
+      </div>
+   </div>
+</nav>

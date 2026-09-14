@@ -1,0 +1,60 @@
+<section id="menu">
+   <div class="container">
+      <div class="text-center mb-5" data-aos="fade-up">
+         <span class="slbl">What's Cooking</span>
+         <h2 class="stitle">Our Delicious <span>Menu</span></h2>
+         <div class="sline"></div>
+      </div>
+      <div class="text-center mb-4" data-aos="fade-up">
+         <button class="filtbtn" [class.active]="filter==='all'" (click)="setFilter('all')">All</button>
+         <button class="filtbtn" [class.active]="filter==='burgers'" (click)="setFilter('burgers')">Burgers</button>
+         <button class="filtbtn" [class.active]="filter==='pizza'" (click)="setFilter('pizza')">Pizza</button>
+         <button class="filtbtn" [class.active]="filter==='chicken'" (click)="setFilter('chicken')">Chicken</button>
+         <button class="filtbtn" [class.active]="filter==='wraps'" (click)="setFilter('wraps')">Wraps</button>
+         <button class="filtbtn" [class.active]="filter==='desserts'" (click)="setFilter('desserts')">Desserts</button>
+         <button class="filtbtn" [class.active]="filter==='pasta'" (click)="setFilter('pasta')">Pasta</button>
+      </div>
+      <div class="row g-4" id="mgrid">
+         @if (loading()) {
+            <div class="col-12 text-center py-5">
+               <i class="fas fa-spinner fa-spin fa-3x" style="color:#e84c3d;"></i>
+            </div>
+         } @else if (error()) {
+            <div class="col-12 text-center py-5">
+               <p style="color:#e84c3d;">{{ error() }}</p>
+            </div>
+         } @else if (visibleItems().length === 0) {
+            <div class="col-12 text-center py-5">
+               <p>No items found for this category.</p>
+            </div>
+         } @else {
+            @for (item of visibleItems(); track item.title) {
+               <div class="col-sm-6 col-lg-4 mwrap" data-aos="fade-up">
+                  <div class="mcard" (click)="openItem(item)">
+                     <div class="mimg">
+                        <img [src]="item.image" [alt]="item.title"/>
+                        @if (item.badge) {
+                           <div class="mbdg" [class.hot]="item.badge.type==='hot'" [class.new]="item.badge.type==='new'"><i class="fas fa-star"></i> {{ item.badge.text }}</div>
+                        }
+                        <div class="mhrt" (click)="fav($event)"><i class="far fa-heart"></i></div>
+                     </div>
+                     <div class="mbody">
+                        <div class="mcat">{{ item.category }}</div>
+                        <div class="mtit">{{ item.title }}</div>
+                        <div class="mdesc">{{ shortDesc(item) }}</div>
+                        <div class="mfoot">
+                           <div>
+                              <div class="mprice">{{ item.price }} @if (item.oldPrice) { <small>{{ item.oldPrice }}</small> }</div>
+                              <div class="mstars"><i class="fas fa-star"></i> <span style="color:#bbb;font-size:.7rem;">({{ item.reviews }})</span></div>
+                           </div>
+                           <button class="madd" title="View Details" (click)="openItem(item)"><i class="fas fa-plus"></i></button>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            }
+         }
+      </div>
+      <div class="text-center mt-5"><a href="#menu" class="btn-red"><i class="fas fa-th-large"></i>View Full Menu</a></div>
+   </div>
+</section>

@@ -1,0 +1,15 @@
+<section id="newsletter">
+   <div class="nlbg"></div>
+   <div class="container">
+      <div class="nlw text-center" data-aos="zoom-in">
+         <span class="slbl" style="color:rgba(255,255,255,.7);">Stay Connected</span>
+         <h2 class="mb-3" style="color:#fff;">Subscribe &amp; Get Exclusive <span style="color:var(--secondary);">Deals</span></h2>
+         <p class="mb-4" style="color:rgba(255,255,255,.78);">Get 15% off your first order plus early access to new menu items</p>
+         <div class="nl-form-wrap">
+            <input class="nlinput" type="email" id="nlEmail" placeholder="Enter your email address..." [(ngModel)]="email"/>
+            <button class="nlbtn" id="nlBtn" (click)="subscribe($event)"><i class="fas fa-paper-plane me-1"></i>Subscribe</button>
+         </div>
+         <p style="color:rgba(255,255,255,.45);font-size:.76rem;margin-top:11px;"><i class="fas fa-lock me-1"></i>No spam, unsubscribe anytime.</p>
+      </div>
+   </div>
+</section>

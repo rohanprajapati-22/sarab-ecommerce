@@ -1,0 +1,29 @@
+<section id="history">
+   <div class="container">
+      <div class="text-center mb-5" data-aos="fade-up">
+         <span class="slbl">Our Journey</span>
+         <h2 class="stitle">A History of <span>Restaurant</span></h2>
+         <div class="sline"></div>
+         <p class="sdesc mx-auto" style="max-width:480px;">From humble beginnings to the city's most beloved restaurant - every chapter written with passion.</p>
+      </div>
+      <div class="timeline" data-aos="fade-up">
+         @for (tl of timeline; track tl.year) {
+            <div class="tli">
+               <div class="tl-left">
+                  <div class="tlyear">{{ tl.year }}</div>
+                  <h5>{{ tl.title }}</h5>
+                  <p>{{ tl.text }}</p>
+               </div>
+               <div class="tl-center">
+                  <div class="tldot"></div>
+               </div>
+               <div class="tl-right">
+                  <div class="tlyear">{{ tl.year }}</div>
+                  <h5>{{ tl.title }}</h5>
+                  <p>{{ tl.text }}</p>
+               </div>
+            </div>
+         }
+      </div>
+   </div>
+</section>

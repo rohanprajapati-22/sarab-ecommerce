@@ -1,0 +1,27 @@
+<section id="blog">
+   <div class="container">
+      <div class="text-center mb-5" data-aos="fade-up">
+         <span class="slbl">News &amp; Updates</span>
+         <h2 class="stitle">Our Latest <span>Blog</span> Posts</h2>
+         <div class="sline"></div>
+      </div>
+      <div class="row g-4">
+         @for (b of posts; track b.tag) {
+            <div class="col-md-6 col-lg-4" data-aos="fade-up">
+               <div class="blcard">
+                  <div class="blimg">
+                     <img [src]="b.img" alt=""/>
+                     <div class="bldatebdg"><span class="bd">{{ b.day }}</span><span class="bm">{{ b.month }}</span></div>
+                  </div>
+                  <div class="blbody">
+                     <div class="bltag">{{ b.tag }}</div>
+                     <div class="bltit"><a href="#">{{ b.title }}</a></div>
+                     <div class="blmeta"><span><i class="fas fa-user"></i>{{ b.author }}</span><span><i class="fas fa-comment"></i>{{ b.comments }} Comments</span></div>
+                     <a href="#" class="blmore">Read More <i class="fas fa-arrow-right"></i></a>
+                  </div>
+               </div>
+            </div>
+         }
+      </div>
+   </div>
+</section>

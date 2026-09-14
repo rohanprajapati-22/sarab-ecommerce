@@ -1,0 +1,17 @@
+<section id="gallery">
+   <div class="container">
+      <div class="text-center mb-5" data-aos="fade-up">
+         <span class="slbl">Food Showcase</span>
+         <h2 class="stitle">Let's See Our <span>Fast Food</span></h2>
+         <div class="sline"></div>
+      </div>
+      <div class="ggrid" data-aos="fade-up">
+         @for (g of gallery; track g.title; let i = $index) {
+            <div class="gitem" (click)="open(i)">
+               <img [src]="g.img" [alt]="g.title"/>
+               <div class="gover"><span><i class="fas fa-expand-alt"></i> {{ g.title }}</span></div>
+            </div>
+         }
+      </div>
+   </div>
+</section>

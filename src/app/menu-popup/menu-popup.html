@@ -1,0 +1,34 @@
+<div id="menuPop" [class.open]="open">
+   <div class="mpbox">
+      <button class="mpclose" id="mpClose" (click)="close()"><i class="fas fa-times"></i></button>
+      @if (item) {
+         <div class="mpimg"><img [src]="item.image" [alt]="item.title"/></div>
+         <div class="mpbody">
+            <div id="mpCat">{{ item.category }}</div>
+            <div id="mpTitle">{{ item.title }}</div>
+            <div id="mpStars">
+               @for (s of starArr; track $index) { <i class="fas fa-star"></i> }
+               @for (e of emptyArr; track $index) { <i class="fas fa-star" style="color:#ddd;"></i> }
+               <span style="color:#bbb;font-size:.78rem;"> {{ item.rating }} ({{ item.reviews }} reviews)</span>
+            </div>
+            <div id="mpDesc">{{ item.description }}</div>
+            <div id="mpPrice">{{ item.price }} @if (item.oldPrice) { <small style="color:#ccc;text-decoration:line-through;margin-left:8px;font-size:1rem;">{{ item.oldPrice }}</small> }</div>
+            <div class="mpmeta" id="mpMeta">
+               <div class="mpm"><div class="mpmv">{{ item.calories }} kcal</div><div class="mpml">Calories</div></div>
+               <div class="mpm"><div class="mpmv">{{ item.prepTime }} min</div><div class="mpml">Prep Time</div></div>
+               <div class="mpm"><div class="mpmv">{{ item.rating }}/5</div><div class="mpml">Rating</div></div>
+            </div>
+            <div class="mpqty">
+               <button class="mpqbtn" id="mpMinus" (click)="minus()">-</button>
+               <span class="mpqnum" id="mpQnum">{{ qty }}</span>
+               <button class="mpqbtn" id="mpPlus" (click)="plus()">+</button>
+               <span style="font-size:.82rem;color:#aaa;margin-left:9px;">portion</span>
+            </div>
+            <div class="mptags" id="mpTags">
+               @for (t of item.tags; track t) { <span class="mptag">{{ t }}</span> }
+            </div>
+            <button class="mpaddcart" id="mpAddCart" (click)="addCart()"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
+         </div>
+      }
+   </div>
+</div>

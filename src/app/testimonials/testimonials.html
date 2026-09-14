@@ -1,0 +1,30 @@
+<section id="testimonials">
+   <div class="container">
+      <div class="text-center mb-5" data-aos="fade-up">
+         <span class="slbl">What People Say</span>
+         <h2 class="stitle">Our Customers <span>Feedback</span></h2>
+         <div class="sline"></div>
+      </div>
+      <div class="swiper tesSwiper" data-aos="fade-up">
+         <div class="swiper-wrapper">
+            @for (t of testimonials; track t.name) {
+               <div class="swiper-slide">
+                  <div class="tescard">
+                     <div class="tesq">"</div>
+                     <div class="tess"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                     <p class="testxt">{{ t.text }}</p>
+                     <div class="tesauth">
+                        <img [src]="t.img" alt=""/>
+                        <div>
+                           <div class="tesnm">{{ t.name }}</div>
+                           <div class="tesrl">{{ t.role }}</div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            }
+         </div>
+         <div class="swiper-pagination mt-4" style="position:static;"></div>
+      </div>
+   </div>
+</section>

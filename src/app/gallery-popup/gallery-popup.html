@@ -1,0 +1,16 @@
+<div id="galPop" [class.open]="open">
+   <div class="gpbox">
+      <button class="gpclose" id="gpClose" (click)="close()"><i class="fas fa-times"></i></button>
+      @if (current) {
+         <img [src]="current.img" alt=""/>
+         <div class="gpcap">
+            <h5>{{ current.title }}</h5>
+            <p>{{ current.desc }}</p>
+         </div>
+      }
+      <div class="gpnav">
+         <button id="gpPrev" (click)="prev()"><i class="fas fa-chevron-left me-1"></i>Prev</button>
+         <button id="gpNext" (click)="next()">Next <i class="fas fa-chevron-right ms-1"></i></button>
+      </div>
+   </div>
+</div>

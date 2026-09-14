@@ -1,0 +1,32 @@
+<section id="chefs">
+   <div class="container">
+      <div class="text-center mb-5" data-aos="fade-up">
+         <span class="slbl">The Culinary Team</span>
+         <h2 class="stitle">Meet Our Expert <span>Chefs</span></h2>
+         <div class="sline"></div>
+      </div>
+      <div class="row g-4">
+@for (c of chefs(); track c.chefName) {
+   <div class="col-sm-6 col-lg-3" data-aos="fade-up">
+      <div class="chcard">
+         <div class="chimg">
+            <img [src]="c.image" alt="" />
+
+            <div class="chsoc">
+               <a href="#"><i class="fab fa-instagram"></i></a>
+               <a href="#"><i class="fab fa-facebook-f"></i></a>
+               <a href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+         </div>
+
+         <div class="chbody">
+            <div class="chnm">{{ c.chefName }}</div>
+            <div class="chrole">{{ c.chefPosition }}</div>
+            <div class="chexp">{{ c.experience }} Experience</div>
+         </div>
+      </div>
+   </div>
+}
+      </div>
+   </div>
+</section>
