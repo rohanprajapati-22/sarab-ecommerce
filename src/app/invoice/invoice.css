@@ -1,0 +1,283 @@
+.invoice-wrap {
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.invoice-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.invoice {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 32px 36px;
+  color: var(--dark);
+}
+
+.inv-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 20px;
+  border-bottom: 2px dashed #eee4d8;
+}
+
+.inv-head h3 {
+  font-size: 1.8rem;
+  letter-spacing: 4px;
+  margin-bottom: 4px;
+}
+
+.inv-no {
+  color: #8a857f;
+  font-size: .9rem;
+  font-weight: 600;
+}
+
+.inv-brand {
+  text-align: right;
+}
+
+.inv-brand span {
+  font-family: "Playfair Display", serif;
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--green);
+  display: block;
+  line-height: 1;
+}
+
+.inv-brand small {
+  color: #8a857f;
+  font-size: .78rem;
+}
+
+.inv-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 22px 0;
+}
+
+.inv-block h4 {
+  font-size: .78rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #8a857f;
+  margin-bottom: 10px;
+}
+
+.inv-block p {
+  font-size: .88rem;
+  color: #555;
+  margin: 2px 0;
+}
+
+.inv-name {
+  font-weight: 700;
+  color: var(--dark) !important;
+  font-size: 1rem !important;
+}
+
+.inv-block-r {
+  text-align: right;
+}
+
+.inv-block-r p {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin: 4px 0;
+}
+
+.inv-block-r span {
+  color: #8a857f;
+}
+
+.inv-block-r strong {
+  color: var(--dark);
+}
+
+.inv-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 6px;
+}
+
+.inv-table th {
+  background: var(--light);
+  color: var(--dark);
+  font-size: .78rem;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.inv-table td {
+  padding: 11px 12px;
+  border-bottom: 1px solid #f3ede4;
+  font-size: .9rem;
+  color: #555;
+}
+
+.ta-r {
+  text-align: right;
+}
+
+.inv-total {
+  display: flex;
+  justify-content: flex-end;
+  padding: 18px 0 6px;
+}
+
+.inv-sum {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  background: var(--dark);
+  color: #fff;
+  border-radius: 12px;
+  padding: 12px 22px;
+  font-size: .95rem;
+}
+
+.inv-sum strong {
+  font-size: 1.25rem;
+}
+
+.inv-pay {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 24px;
+  background: #f9f6f1;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-top: 16px;
+}
+
+.inv-pay h4 {
+  grid-column: 1 / -1;
+  font-size: .78rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #8a857f;
+  margin-bottom: 6px;
+}
+
+.inv-pay p {
+  font-size: .86rem;
+  color: #555;
+  margin: 2px 0;
+}
+
+.inv-pay span {
+  display: inline-block;
+  min-width: 92px;
+  color: #8a857f;
+}
+
+.inv-foot {
+  text-align: center;
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid #f3ede4;
+  color: #8a857f;
+  font-size: .85rem;
+}
+
+.cart-checkout-msg {
+  text-align: center;
+  padding: 70px 20px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+}
+
+.cart-checkout-msg i {
+  font-size: 1.4rem;
+}
+
+.cart-checkout-msg h3 {
+  font-size: 1.6rem;
+  margin-bottom: 8px;
+}
+
+.cart-checkout-msg p {
+  color: #8a857f;
+  margin-bottom: 26px;
+}
+
+.btn-primary-sm {
+  background: linear-gradient(135deg, var(--green), #1a4a35);
+  color: #fff;
+  border: none;
+  padding: 13px 30px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: .9rem;
+  cursor: pointer;
+  transition: .3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.btn-primary-sm:hover {
+  transform: translateY(-3px);
+}
+
+.btn-back {
+  background: #fff;
+  color: var(--dark);
+  border: 1.5px solid #e8e2da;
+  padding: 11px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: .3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-back:hover {
+  background: var(--green);
+  border-color: var(--green);
+  color: #fff;
+}
+
+@media (max-width: 575px) {
+  .inv-meta {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
+
+  .inv-brand {
+    text-align: left;
+  }
+
+  .inv-block-r {
+    text-align: left;
+  }
+
+  .inv-block-r p {
+    justify-content: flex-start;
+  }
+
+  .inv-pay {
+    grid-template-columns: 1fr;
+  }
+
+  .invoice {
+    padding: 22px 18px;
+  }
+
+  .invoice-actions {
+    flex-wrap: wrap;
+  }
+}

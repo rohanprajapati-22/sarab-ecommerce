@@ -1,1 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* print only the invoice when printInvoice() is triggered */
+@media print {
+  body.invoice-print * {
+    visibility: hidden;
+  }
+
+  body.invoice-print .invoice-print-area,
+  body.invoice-print .invoice-print-area * {
+    visibility: visible;
+  }
+
+  body.invoice-print .invoice-print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    max-width: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}

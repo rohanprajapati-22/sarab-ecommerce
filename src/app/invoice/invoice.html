@@ -1,0 +1,93 @@
+<div class="invoice-wrap" data-aos="fade-up">
+   <div class="invoice-actions">
+      <button class="btn-back" (click)="print()"><i class="fas fa-print"></i> Print Invoice</button>
+      <button class="btn-primary-sm" (click)="goHome()"><i class="fas fa-home"></i> Back to Home</button>
+   </div>
+
+   @if (invoice(); as inv) {
+      <div class="invoice invoice-print-area">
+         <div class="inv-head">
+            <div>
+               <h3>INVOICE</h3>
+               <p class="inv-no">{{ inv.invoiceNumber }}</p>
+            </div>
+            <div class="inv-brand">
+               <span>Sarab</span>
+               <small>Fast Food &amp; Restaurant</small>
+            </div>
+         </div>
+         <div class="inv-meta">
+            <div class="inv-block">
+               <h4>Billed To</h4>
+               <p class="inv-name">{{ inv.customerName }}</p>
+               <p>{{ inv.email }}</p>
+               <p>{{ inv.phone }}</p>
+               <p>{{ inv.address }}</p>
+            </div>
+            <div class="inv-block inv-block-r">
+               <p><span>Order #</span><strong>{{ inv.orderId }}</strong></p>
+               <p><span>Date</span>{{ inv.orderDate | date: 'medium' }}</p>
+               <p><span>Status</span>{{ inv.orderStatus }} / {{ inv.paymentStatus }}</p>
+            </div>
+         </div>
+         <table class="inv-table">
+            <thead>
+               <tr>
+                  <th>Item</th>
+                  <th>Qty</th>
+                  <th>Price</th>
+                  <th class="ta-r">Subtotal</th>
+               </tr>
+            </thead>
+            <tbody>
+               @for (it of inv.items; track $index) {
+                  <tr>
+                     <td>{{ it.productName }}</td>
+                     <td>{{ it.quantity }}</td>
+                     <td>₹{{ it.price.toFixed(2) }}</td>
+                     <td class="ta-r">₹{{ it.subtotal.toFixed(2) }}</td>
+                  </tr>
+               }
+            </tbody>
+         </table>
+         <div class="inv-total">
+            <div class="inv-sum">
+               <span>Total</span>
+               <strong>₹{{ inv.totalAmount.toFixed(2) }}</strong>
+            </div>
+         </div>
+         @if (inv.payment; as pay) {
+            <div class="inv-pay">
+               <h4>Payment</h4>
+               <p><span>Method</span>{{ pay.paymentMethod }}</p>
+               <p><span>Status</span>{{ pay.paymentStatus }}</p>
+               <p><span>Transaction</span>{{ pay.transactionId }}</p>
+               <p><span>Paid at</span>{{ pay.createdAt | date: 'medium' }}</p>
+            </div>
+         }
+         <div class="inv-foot">
+            <p>Thank you for choosing Sarab!</p>
+         </div>
+      </div>
+   } @else {
+      <div class="cart-checkout-msg">
+         <i class="fas fa-check-circle" style="color:var(--green)"></i>
+         <h3>Order Placed!</h3>
+         @if (loading()) {
+            <p>Generating your invoice...</p>
+         } @else if (order(); as res) {
+            <p>
+               Order #{{ res.orderId }} for ₹{{ res.totalAmount.toFixed(2) }} has been received.
+               @if (payment(); as pay) {
+                  Payment status: {{ pay.paymentStatus }}.
+               } @else {
+                  Status: {{ res.orderStatus }}.
+               }
+            </p>
+         } @else {
+            <p>Thank you for your order. We will prepare it fresh for you.</p>
+         }
+         <button class="btn-primary-sm" (click)="goHome()">Back to Home</button>
+      </div>
+   }
+</div>

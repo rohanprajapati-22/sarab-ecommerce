@@ -44,7 +44,7 @@
                         <div class="mdesc">{{ shortDesc(item) }}</div>
                         <div class="mfoot">
                            <div>
-                              <div class="mprice">{{ item.price }} @if (item.oldPrice) { <small>{{ item.oldPrice }}</small> }</div>
+                              <div class="mprice">{{  ui.formatPrice(item.price)  }} @if (item.oldPrice) { <small>{{ ui.formatPrice(item.oldPrice) }}</small> }</div>
                               <div class="mstars"><i class="fas fa-star"></i> <span style="color:#bbb;font-size:.7rem;">({{ item.reviews }})</span></div>
                            </div>
                            <button class="madd" title="View Details" (click)="openItem(item)"><i class="fas fa-plus"></i></button>

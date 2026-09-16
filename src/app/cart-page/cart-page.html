@@ -9,11 +9,62 @@
       </div>
 
       @if (checkoutDone()) {
-         <div class="cart-checkout-msg">
-            <i class="fas fa-check-circle" style="color:var(--green)"></i>
-            <h3>Order Placed!</h3>
-            <p>Thank you for your order. We will prepare it fresh for you.</p>
-            <button class="btn-primary-sm" (click)="goHome()">Back to Home</button>
+         <app-invoice
+            [orderId]="orderResult()?.orderId ?? 0"
+            [order]="orderResult()"
+            [payment]="paymentResult()"
+         />
+      } @else if (showPayment()) {
+         <app-payment [order]="orderResult()!" (paid)="onPaid($event)" (cancel)="goHome()" />
+      } @else if (showCheckout()) {
+         <div class="checkout-layout">
+            <div class="cart-list">
+               @for (ci of items; track ci.item.title) {
+                  <div class="cart-item">
+                     <img [src]="ci.item.image" [alt]="ci.item.title" class="cart-img" />
+                     <div class="cart-info">
+                        <div class="cart-cat">{{ ci.item.category }}</div>
+                        <div class="cart-name">{{ ci.item.title }}</div>
+                        <div class="cart-price">{{ ui.formatPrice(ci.item.price) }}</div>
+                     </div>
+                     <div class="cart-qty">
+                        <span class="qty-val">x{{ ci.qty }}</span>
+                     </div>
+                     <div class="cart-line">{{ lineTotal(ci) }}</div>
+                  </div>
+               }
+            </div>
+            <div class="checkout-panel">
+               <h3>Delivery Details</h3>
+               @if (error()) {
+                  <div class="checkout-error">{{ error() }}</div>
+               }
+               <div class="checkout-field">
+                  <label class="flbl" for="coName">Full Name *</label>
+                  <input id="coName" type="text" class="fctrl" placeholder="John Doe" [(ngModel)]="customer.customerName" />
+               </div>
+               <div class="checkout-field">
+                  <label class="flbl" for="coEmail">Email *</label>
+                  <input id="coEmail" type="email" class="fctrl" placeholder="you@email.com" [(ngModel)]="customer.email" />
+               </div>
+               <div class="checkout-field">
+                  <label class="flbl" for="coPhone">Phone *</label>
+                  <input id="coPhone" type="tel" class="fctrl" placeholder="+1 (800) 000-0000" [(ngModel)]="customer.phone" />
+               </div>
+               <div class="checkout-field">
+                  <label class="flbl" for="coAddress">Delivery Address *</label>
+                  <textarea id="coAddress" class="fctrl" rows="2" placeholder="Street, city, zip..." [(ngModel)]="customer.address"></textarea>
+               </div>
+               <div class="sum-row sum-total"><span>Total</span><span>{{ total }}</span></div>
+               <button class="btn-checkout" (click)="placeOrder()" [disabled]="isPlacing()">
+                  @if (isPlacing()) {
+                     <i class="fas fa-spinner fa-spin"></i> Placing Order...
+                  } @else {
+                     <i class="fas fa-check-circle"></i> Place Order
+                  }
+               </button>
+               <button class="btn-back w-100 justify-content-center" (click)="backToCart()">Back to Cart</button>
+            </div>
          </div>
       } @else if (items.length === 0) {
          <div class="cart-empty">
@@ -51,7 +102,7 @@
                <div class="sum-row"><span>Items ({{ ui.cartCount() }})</span><span>{{ subtotal }}</span></div>
                <div class="sum-row"><span>Delivery</span><span>Free</span></div>
                <div class="sum-row sum-total"><span>Total</span><span>{{ total }}</span></div>
-               <button class="btn-checkout" (click)="checkout()"><i class="fas fa-credit-card"></i> Proceed to Checkout</button>
+               <button class="btn-checkout mb-2" (click)="proceedToCheckout()"><i class="fas fa-credit-card"></i> Proceed to Checkout</button>
                <button class="btn-clear" (click)="clear()"><i class="fas fa-trash-alt"></i> Clear Cart</button>
             </div>
          </div>

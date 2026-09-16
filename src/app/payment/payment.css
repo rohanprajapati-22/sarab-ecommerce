@@ -1,0 +1,130 @@
+.pay-layout {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.pay-panel {
+  background: #fff;
+  border-radius: 18px;
+  padding: 36px;
+  box-shadow: var(--shadow);
+  width: 100%;
+  max-width: 460px;
+}
+
+.pay-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--secondary), #e08d16);
+  color: #fff;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.pay-panel h3 {
+  text-align: center;
+  font-size: 1.45rem;
+  margin-bottom: 20px;
+}
+
+.pay-order {
+  background: var(--light);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+}
+
+.pay-note {
+  background: #fff7ec;
+  color: #8a5a10;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: .84rem;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkout-field {
+  margin-bottom: 16px;
+}
+
+.checkout-error {
+  background: #fff1ee;
+  color: var(--primary);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: .85rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.sum-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: .92rem;
+  color: #6f6860;
+  padding: 9px 0;
+}
+
+.btn-checkout {
+  width: 100%;
+  margin-top: 18px;
+  background: linear-gradient(135deg, var(--secondary), #e08d16);
+  color: var(--dark);
+  border: none;
+  padding: 14px;
+  border-radius: 50px;
+  font-weight: 800;
+  font-size: .95rem;
+  cursor: pointer;
+  transition: .3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+}
+
+.btn-checkout:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(246, 166, 35, 0.4);
+}
+
+.btn-back {
+  background: #fff;
+  color: var(--dark);
+  border: 1.5px solid #e8e2da;
+  padding: 11px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: .3s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.btn-back:hover {
+  background: var(--green);
+  border-color: var(--green);
+  color: #fff;
+}
+
+.stripe-card-element {
+  border: 1.5px solid #e8e2da;
+  border-radius: 10px;
+  padding: 14px;
+  background: #fff;
+  transition: border-color 0.2s;
+}
+
+.stripe-card-element:focus-within {
+  border-color: var(--secondary);
+}
