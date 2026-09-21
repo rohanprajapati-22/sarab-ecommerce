@@ -6,6 +6,7 @@ import { OrderService, CreateOrder, CreateOrderItem, OrderResponse } from '../or
 import { PaymentResponse } from '../payment-service';
 import { Payment } from '../payment/payment';
 import { Invoice } from '../invoice/invoice';
+import { AuthService } from '../auth-service';
 
 @Component({
   imports: [FormsModule, Payment, Invoice],
@@ -34,8 +35,15 @@ export class CartPage {
   constructor(
     public ui: UiService,
     private router: Router,
-    private orderService: OrderService
-  ) {}
+    private orderService: OrderService,
+    private auth: AuthService
+  ) {
+    const user = this.auth.user();
+    if (user) {
+      this.customer.customerName = user.name;
+      this.customer.email = user.email;
+    }
+  }
 
   get items(): CartItem[] {
     return this.ui.cartItems();
@@ -66,8 +74,14 @@ export class CartPage {
   }
 
   proceedToCheckout() {
-    this.showCheckout.set(true);
     this.error.set('');
+
+    if (!this.auth.isAuthenticated()) {
+      this.router.navigate(['/login'], { queryParams: { return: '/cart' } });
+      return;
+    }
+
+    this.showCheckout.set(true);
   }
 
   backToCart() {
@@ -77,6 +91,11 @@ export class CartPage {
 
   placeOrder() {
     if (this.isPlacing()) {
+      return;
+    }
+
+    if (!this.auth.isAuthenticated()) {
+      this.router.navigate(['/login'], { queryParams: { return: '/cart' } });
       return;
     }
 
@@ -115,6 +134,7 @@ export class CartPage {
       phone: this.customer.phone.trim(),
       address: this.customer.address.trim(),
       items,
+      userId: this.auth.user()?.userId,
     };
 
     this.isPlacing.set(true);

@@ -12,6 +12,7 @@ export interface CreateOrder {
   phone: string;
   address: string;
   items: CreateOrderItem[];
+  userId?: number;
 }
 
 export interface OrderResponse {

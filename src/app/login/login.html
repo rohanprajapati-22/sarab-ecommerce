@@ -1,0 +1,114 @@
+<section class="auth-page">
+   <div class="container">
+      <div class="auth-wrap">
+         <div class="auth-card">
+
+            <div class="auth-logo">
+               <div class="bico">
+                  <i class="fas fa-utensils"></i>
+               </div>
+            </div>
+
+            <h2 class="auth-title">Welcome Back</h2>
+            <p class="auth-sub">Log in to your Sarab account</p>
+
+            @if (error()) {
+               <div class="auth-error">
+                  {{ error() }}
+               </div>
+            }
+
+            <form
+               [formGroup]="loginForm"
+               (ngSubmit)="submit()"
+               novalidate
+            >
+
+               <!-- Email -->
+               <div class="auth-field">
+                  <label class="flbl" for="loginEmail">
+                     Email *
+                  </label>
+
+                  <input
+                     id="loginEmail"
+                     type="email"
+                     class="fctrl"
+                     placeholder="you&#64;email.com"
+                     formControlName="email"
+                  />
+
+                  @if (
+                     loginForm.get('email')?.touched &&
+                     loginForm.get('email')?.hasError('required')
+                  ) {
+                     <small class="field-error">
+                        Please enter your email address.
+                     </small>
+                  }
+
+                  @if (
+                     loginForm.get('email')?.touched &&
+                     loginForm.get('email')?.hasError('email')
+                  ) {
+                     <small class="field-error">
+                        Please enter a valid email address.
+                     </small>
+                  }
+               </div>
+
+
+               <!-- Password -->
+               <div class="auth-field">
+                  <label class="flbl" for="loginPassword">
+                     Password *
+                  </label>
+
+                  <input
+                     id="loginPassword"
+                     type="password"
+                     class="fctrl"
+                     placeholder="••••••••"
+                     formControlName="password"
+                  />
+
+                  @if (
+                     loginForm.get('password')?.touched &&
+                     loginForm.get('password')?.hasError('required')
+                  ) {
+                     <small class="field-error">
+                        Please enter your password.
+                     </small>
+                  }
+               </div>
+
+
+               <!-- Login Button -->
+               <button
+                  type="submit"
+                  class="btn-auth"
+                  [disabled]="submitting()"
+               >
+
+                  @if (submitting()) {
+                     <i class="fas fa-spinner fa-spin"></i>
+                     Logging in...
+                  }
+                  @else {
+                     <i class="fas fa-sign-in-alt"></i>
+                     Log In
+                  }
+
+               </button>
+
+            </form>
+
+            <p class="auth-switch">
+               Don't have an account?
+               <a routerLink="/register">Create one</a>
+            </p>
+
+         </div>
+      </div>
+   </div>
+</section>

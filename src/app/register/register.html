@@ -1,0 +1,169 @@
+<section class="auth-page">
+   <div class="container">
+      <div class="auth-wrap">
+         <div class="auth-card">
+
+            <div class="auth-logo">
+               <div class="bico">
+                  <i class="fas fa-utensils"></i>
+               </div>
+            </div>
+
+            <h2 class="auth-title">Create Account</h2>
+            <p class="auth-sub">Join Sarab and order your favorites</p>
+
+            @if (error()) {
+               <div class="auth-error">
+                  {{ error() }}
+               </div>
+            }
+
+            <form [formGroup]="registerForm" (ngSubmit)="submit()" novalidate>
+
+               <!-- Full Name -->
+               <div class="auth-field">
+                  <label class="flbl" for="regName">
+                     Full Name *
+                  </label>
+
+                  <input
+                     id="regName"
+                     type="text"
+                     class="fctrl"
+                     placeholder="John Doe"
+                     formControlName="name"
+                  />
+
+                  @if (
+                     registerForm.get('name')?.touched &&
+                     registerForm.get('name')?.hasError('required')
+                  ) {
+                     <small class="field-error">
+                        Please enter your full name.
+                     </small>
+                  }
+               </div>
+
+
+               <!-- Email -->
+               <div class="auth-field">
+                  <label class="flbl" for="regEmail">
+                     Email *
+                  </label>
+
+                  <input
+                     id="regEmail"
+                     type="email"
+                     class="fctrl"
+                     placeholder="you&#64;email.com"
+                     formControlName="email"
+                  />
+
+                  @if (
+                     registerForm.get('email')?.touched &&
+                     registerForm.get('email')?.hasError('required')
+                  ) {
+                     <small class="field-error">
+                        Please enter your email address.
+                     </small>
+                  }
+
+                  @if (
+                     registerForm.get('email')?.touched &&
+                     registerForm.get('email')?.hasError('email')
+                  ) {
+                     <small class="field-error">
+                        Please enter a valid email address.
+                     </small>
+                  }
+               </div>
+
+
+               <!-- Password -->
+               <div class="auth-field">
+                  <label class="flbl" for="regPassword">
+                     Password *
+                  </label>
+
+                  <input
+                     id="regPassword"
+                     type="password"
+                     class="fctrl"
+                     placeholder="••••••••"
+                     formControlName="password"
+                  />
+
+                  @if (
+                     registerForm.get('password')?.touched &&
+                     registerForm.get('password')?.hasError('required')
+                  ) {
+                     <small class="field-error">
+                        Please choose a password.
+                     </small>
+                  }
+
+                  @if (
+                     registerForm.get('password')?.touched &&
+                     registerForm.get('password')?.hasError('minlength')
+                  ) {
+                     <small class="field-error">
+                        Password must be at least 6 characters.
+                     </small>
+                  }
+               </div>
+
+
+               <!-- Confirm Password -->
+               <div class="auth-field">
+                  <label class="flbl" for="regConfirm">
+                     Confirm Password *
+                  </label>
+
+                  <input
+                     id="regConfirm"
+                     type="password"
+                     class="fctrl"
+                     placeholder="••••••••"
+                     formControlName="confirmPassword"
+                  />
+
+                  @if (
+                     registerForm.get('confirmPassword')?.touched &&
+                     registerForm.get('confirmPassword')?.hasError('required')
+                  ) {
+                     <small class="field-error">
+                        Please confirm your password.
+                     </small>
+                  }
+               </div>
+
+
+               <!-- Submit -->
+               <button
+                  type="submit"
+                  class="btn-auth"
+                  [disabled]="submitting()"
+               >
+
+                  @if (submitting()) {
+                     <i class="fas fa-spinner fa-spin"></i>
+                     Creating Account...
+                  }
+                  @else {
+                     <i class="fas fa-user-plus"></i>
+                     Create Account
+                  }
+
+               </button>
+
+            </form>
+
+            <p class="auth-switch">
+               Already have an account?
+               <a routerLink="/login">Log in</a>
+            </p>
+
+         </div>
+      </div>
+   </div>
+</section>

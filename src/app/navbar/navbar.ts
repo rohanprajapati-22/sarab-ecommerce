@@ -1,5 +1,7 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { UiService } from '../ui.service';
+import { AuthService } from '../auth-service';
 
 @Component({
   imports: [],
@@ -11,7 +13,11 @@ import { UiService } from '../ui.service';
 export class Navbar implements OnInit, OnDestroy {
   navOpen = false;
 
-  constructor(private ui: UiService) {}
+  constructor(
+    private ui: UiService,
+    private router: Router,
+    public auth: AuthService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -27,6 +33,17 @@ export class Navbar implements OnInit, OnDestroy {
 
   openSearch() {
     this.ui.toggleSearch(true);
+  }
+
+  goToLogin() {
+    this.navOpen = false;
+    this.router.navigate(['/login']);
+  }
+
+  logout() {
+    this.navOpen = false;
+    this.auth.logout();
+    this.router.navigate(['/']);
   }
 
   ngOnDestroy(): void {}
