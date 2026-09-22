@@ -45,11 +45,11 @@ export class MenuService {
   }
 
   reserveTable(data: ReservationData): Observable<ReservationResponse> {
-  return this.http.post<ReservationResponse>(
-    `/api/reservation`,
-    data
-  );
-}
+    return this.http.post<ReservationResponse>(
+      `/api/reservation`,
+      data
+    );
+  }
 
   getChefsData(): Observable<any[]>{
     return this.http.get<any[]>(`/api/chef`);
@@ -57,5 +57,9 @@ export class MenuService {
 
   getMarqueeItem():Observable<any[]>{
     return this.http.get<any[]>(`/api/Menu/GetMarquee`);
+  }
+
+  getHistory():Observable<any[]>{
+    return this.http.get<any[]>(`/api/History`);
   }
 }
