@@ -1,14 +1,13 @@
-import { Component } from '@angular/core';
-import { ContactMessage, MenuService } from '../menu.service';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { finalize } from 'rxjs';
+import { ContactMessage, MenuService } from '../menu.service';
 
 @Component({
-  imports: [FormsModule],
   selector: 'app-contact',
-  styleUrl: './contact.css',
-  templateUrl: './contact.html',
   standalone: true,
+  imports: [FormsModule],
+  templateUrl: './contact.html',
+  styleUrl: './contact.css',
 })
 export class Contact {
   ok = false;
@@ -22,10 +21,12 @@ export class Contact {
     message: '',
   };
 
-  constructor(private menuService: MenuService) {}
+  constructor(
+    private menuService: MenuService,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   send(): void {
-    // Prevent multiple clicks
     if (this.isSending) {
       return;
     }
@@ -44,55 +45,54 @@ export class Contact {
       return;
     }
 
-    if (!this.contactData.subject.trim()) {
-      alert('Please select a subject.');
-      return;
-    }
-
     if (!this.contactData.message.trim()) {
       alert('Please enter your message.');
       return;
     }
 
-    // Start Sending
     this.isSending = true;
 
-    console.log('Sending data:', this.contactData);
+    // Make a copy of the data being sent
+    const messageToSend: ContactMessage = {
+      ...this.contactData,
+    };
 
-    this.menuService
-      .sendContactMessage(this.contactData)
+    this.menuService.sendContactMessage(messageToSend).subscribe({
+      next: (response) => {
+        // Clear the form
+        this.contactData = {
+          name: '',
+          email: '',
+          phone: '',
+          subject: 'General Inquiry',
+          message: '',
+        };
 
-      .pipe(
-        // This ALWAYS runs when API finishes
-        finalize(() => {
-          console.log('API request finished');
+        // Stop sending
+        this.isSending = false;
 
-          this.isSending = false;
-        }),
-      )
+        // Show success message
+        this.ok = true;
+        setTimeout(() => { 
+          this.ok = false; 
+        }, 3000);
 
-      .subscribe({
-        next: (response) => {
-          console.log('Message saved successfully:', response);
+        // Force Angular to update the UI
+        this.cdr.detectChanges();
 
-          // Show success message
-          this.ok = true;
+      },
 
-          // Clear form
-          this.contactData = {
-            name: '',
-            email: '',
-            phone: '',
-            subject: 'General Inquiry',
-            message: '',
-          };
-        },
+      error: (error) => {
+        console.error('API ERROR:', error);
 
-        error: (error) => {
-          console.error('Contact API Error:', error);
+        this.isSending = false;
+        this.ok = false;
 
-          alert('Unable to send your message. Please try again.');
-        },
-      });
+        // Update UI
+        this.cdr.detectChanges();
+
+        alert('Unable to send your message. Please try again.');
+      },
+    });
   }
 }

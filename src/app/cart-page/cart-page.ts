@@ -75,7 +75,7 @@ export class CartPage {
 
   proceedToCheckout() {
     this.error.set('');
-
+    
     if (!this.auth.isAuthenticated()) {
       this.router.navigate(['/login'], { queryParams: { return: '/cart' } });
       return;
@@ -94,7 +94,7 @@ export class CartPage {
       return;
     }
 
-    if (!this.auth.isAuthenticated()) {
+   if (!this.auth.isAuthenticated()) {
       this.router.navigate(['/login'], { queryParams: { return: '/cart' } });
       return;
     }

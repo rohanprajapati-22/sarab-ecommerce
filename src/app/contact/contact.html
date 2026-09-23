@@ -2,52 +2,98 @@
   <div class="container">
     <div class="text-center mb-5" data-aos="fade-up">
       <span class="slbl">Get In Touch</span>
+
       <h2 class="stitle">Contact <span>Us</span></h2>
+
       <div class="sline"></div>
+
       <p class="sdesc mx-auto" style="max-width: 480px">
         Have a question, feedback, or want to plan a special event? We'd love to hear from you.
       </p>
     </div>
+
     <div class="row g-4">
+      <!-- LEFT SIDE -->
       <div class="col-lg-4" data-aos="fade-right">
         <div class="ctdark">
           <h4>Let's Talk</h4>
+
           <p class="ctsub">We typically respond within 2 hours during business hours.</p>
+
           <div class="ctitem">
-            <div class="cticon"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="cticon">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+
             <div class="ctinfo">
-              <strong>Address</strong
-              ><span>42 Flavor Street, Manhattan,<br />New York, NY 10001</span>
+              <strong>Address</strong>
+              <span>
+                42 Flavor Street, Manhattan,<br />
+                New York, NY 10001
+              </span>
             </div>
           </div>
+
           <div class="ctitem">
-            <div class="cticon"><i class="fas fa-phone-alt"></i></div>
-            <div class="ctinfo"><strong>Phone</strong><span>+1 (800) 123-4567</span></div>
-          </div>
-          <div class="ctitem">
-            <div class="cticon"><i class="fas fa-envelope"></i></div>
-            <div class="ctinfo"><strong>Email</strong><span>hello&#64;sarabfood.com</span></div>
-          </div>
-          <div class="ctitem">
-            <div class="cticon"><i class="fas fa-clock"></i></div>
+            <div class="cticon">
+              <i class="fas fa-phone-alt"></i>
+            </div>
+
             <div class="ctinfo">
-              <strong>Working Hours</strong><span>Wed - Sun: 9 AM - 11 PM</span>
+              <strong>Phone</strong>
+              <span>+1 (800) 123-4567</span>
             </div>
           </div>
+
+          <div class="ctitem">
+            <div class="cticon">
+              <i class="fas fa-envelope"></i>
+            </div>
+
+            <div class="ctinfo">
+              <strong>Email</strong>
+              <span>hello&#64;sarabfood.com</span>
+            </div>
+          </div>
+
+          <div class="ctitem">
+            <div class="cticon">
+              <i class="fas fa-clock"></i>
+            </div>
+
+            <div class="ctinfo">
+              <strong>Working Hours</strong>
+              <span>Wed - Sun: 9 AM - 11 PM</span>
+            </div>
+          </div>
+
           <div class="ctsocrow">
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-youtube"></i></a>
+            <a href="#">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+
+            <a href="#">
+              <i class="fab fa-instagram"></i>
+            </a>
+
+            <a href="#">
+              <i class="fab fa-twitter"></i>
+            </a>
+
+            <a href="#">
+              <i class="fab fa-youtube"></i>
+            </a>
           </div>
         </div>
       </div>
+
+      <!-- RIGHT SIDE -->
       <div class="col-lg-8" data-aos="fade-left">
         <div class="fcard">
           <div class="row g-3">
-            <!-- Your Name -->
+            <!-- NAME -->
             <div class="col-sm-6">
-              <label class="flbl">Your Name *</label>
+              <label class="flbl"> Your Name * </label>
 
               <input
                 type="text"
@@ -57,9 +103,9 @@
               />
             </div>
 
-            <!-- Email -->
+            <!-- EMAIL -->
             <div class="col-sm-6">
-              <label class="flbl">Email Address *</label>
+              <label class="flbl"> Email Address * </label>
 
               <input
                 type="email"
@@ -69,9 +115,9 @@
               />
             </div>
 
-            <!-- Phone -->
+            <!-- PHONE -->
             <div class="col-sm-6">
-              <label class="flbl">Phone Number</label>
+              <label class="flbl"> Phone Number </label>
 
               <input
                 type="tel"
@@ -81,22 +127,26 @@
               />
             </div>
 
-            <!-- Subject -->
+            <!-- SUBJECT -->
             <div class="col-sm-6">
-              <label class="flbl">Subject *</label>
+              <label class="flbl"> Subject * </label>
 
               <select class="fctrl" [(ngModel)]="contactData.subject">
                 <option value="General Inquiry">General Inquiry</option>
+
                 <option value="Catering & Events">Catering & Events</option>
+
                 <option value="Feedback">Feedback</option>
+
                 <option value="Partnership">Partnership</option>
+
                 <option value="Media & Press">Media & Press</option>
               </select>
             </div>
 
-            <!-- Message -->
+            <!-- MESSAGE -->
             <div class="col-12">
-              <label class="flbl">Message *</label>
+              <label class="flbl"> Message * </label>
 
               <textarea
                 class="fctrl"
@@ -106,27 +156,27 @@
               ></textarea>
             </div>
 
-            <!-- Send Button -->
-            <div class="col-12">
-              <div class="col-12">
-                <button type="button" class="btn-red" (click)="send()" [disabled]="isSending">
-                  @if (isSending) {
-                    <i class="fas fa-spinner fa-spin"></i>
-                    Sending...
-                  } @else {
-                    <i class="fas fa-paper-plane"></i>
-                    Send Message
-                  }
+              <!-- SEND BUTTON + SUCCESS MESSAGE -->
+              <div class="col-12 d-flex align-items-center gap-3">
+
+                <button
+                  type="button"
+                  class="btn-red"
+                  (click)="send()"
+                  [disabled]="isSending"
+                >
+                  <i class="fas fa-paper-plane"></i>
+                  Send Message
                 </button>
+
+                @if (ok) {
+                  <div class="sucmsg">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Message sent!</span>
+                  </div>
+                }
+
               </div>
-            </div>
-          </div>
-
-          <!-- Success Message -->
-          <div class="sucmsg" id="ctcOk" [style.display]="ok ? 'block' : 'none'">
-            <i class="fas fa-check-circle"></i>
-
-            <p>Message sent!</p>
           </div>
         </div>
       </div>

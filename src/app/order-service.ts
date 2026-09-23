@@ -23,6 +23,27 @@ export interface OrderResponse {
   paymentStatus: string;
 }
 
+export interface Order {
+  orderId: number;
+  customerName: string;
+  email: string;
+  phone: string;
+  address: string;
+  totalAmount: number;
+  orderStatus: string;
+  paymentStatus: string;
+  orderDate: string;
+  items: OrderItem[];
+}
+
+export interface OrderItem {
+  menuId: number;
+  menuName: string;
+  quantity: number;
+  unitPrice: number;
+}
+
+
 @Injectable({ providedIn: 'root' })
 export class OrderService {
   private http = inject(HttpClient);
@@ -45,22 +66,3 @@ export class OrderService {
   }
 }
 
-export interface Order {
-  orderId: number;
-  customerName: string;
-  email: string;
-  phone: string;
-  address: string;
-  totalAmount: number;
-  orderStatus: string;
-  paymentStatus: string;
-  orderDate: string;
-  items: OrderItem[];
-}
-
-export interface OrderItem {
-  menuId: number;
-  menuName: string;
-  quantity: number;
-  unitPrice: number;
-}
