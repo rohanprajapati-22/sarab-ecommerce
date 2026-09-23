@@ -1,0 +1,8 @@
+.admin-login-card {
+  max-width: 460px;
+  margin: 0 auto;
+}
+
+.admin-login-card .bico {
+  background: var(--dark);
+}

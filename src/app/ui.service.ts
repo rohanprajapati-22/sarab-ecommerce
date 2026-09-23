@@ -102,7 +102,7 @@ export class UiService {
 
   formatPrice(price: string | number): string {
     const s = String(price);
-    return /[$€£₹]/.test(s) ? s : '₹' + s;
+    return /[$€£₹]/.test(s) ? s : '€' + s;
   }
 
   addToCart(item: MenuItem, qty: number) {

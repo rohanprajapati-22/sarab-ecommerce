@@ -1,5 +1,7 @@
-import { Component, HostListener } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, HostListener, OnInit, signal } from '@angular/core';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { Navbar } from './navbar/navbar';
 import { SearchOverlay } from './search-overlay/search-overlay';
 import { MenuPopup } from './menu-popup/menu-popup';
@@ -24,11 +26,26 @@ declare const AOS: any;
   styleUrl: './app.css',
   templateUrl: './app.html',
 })
-export class App {
+export class App implements OnInit {
+  readonly isAdminRoute = signal(false);
+
   private lastScrollY = 0;
   private clickHandler = (e: Event) => this.onAnchorClick(e);
+  private routerSub?: Subscription;
 
-  constructor(private ui: UiService) {}
+  constructor(
+    private ui: UiService,
+    private router: Router
+  ) {}
+
+  ngOnInit() {
+    this.isAdminRoute.set(this.router.url.startsWith('/admin'));
+    this.routerSub = this.router.events
+      .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
+      .subscribe((e) =>
+        this.isAdminRoute.set(e.urlAfterRedirects.startsWith('/admin'))
+      );
+  }
 
   ngAfterViewInit() {
     if (typeof AOS !== 'undefined') {
@@ -39,6 +56,7 @@ export class App {
   }
 
   ngOnDestroy() {
+    this.routerSub?.unsubscribe();
     document.removeEventListener('click', this.clickHandler);
     if ((this as any)._onScroll) window.removeEventListener('scroll', (this as any)._onScroll);
   }

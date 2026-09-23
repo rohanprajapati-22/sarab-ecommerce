@@ -6,6 +6,7 @@ export interface RegisterRequest {
   name: string;
   email: string;
   password: string;
+  role?: string;
 }
 
 export interface LoginRequest {
@@ -18,6 +19,11 @@ export interface AuthResponse {
   userId: number;
   name: string;
   email: string;
+  role?: string;
+}
+
+export function isAdminRole(role?: string | null): boolean {
+  return !!role && role.toLowerCase() === 'admin';
 }
 
 @Injectable({ providedIn: 'root' })
@@ -30,6 +36,7 @@ export class AuthService {
 
   readonly user = signal<AuthResponse | null>(null);
   readonly isAuthenticated = computed(() => !!this.user());
+  readonly isAdmin = computed(() => isAdminRole(this.user()?.role));
 
   constructor() {
     if (typeof window !== 'undefined' && window.localStorage) {

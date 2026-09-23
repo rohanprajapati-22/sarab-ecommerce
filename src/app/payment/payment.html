@@ -4,7 +4,7 @@
       <h3>Secure Payment</h3>
       <div class="pay-order">
          <div class="sum-row"><span>Order #</span><span>{{ order().orderId }}</span></div>
-         <div class="sum-row"><span>Amount Due</span><span>₹{{ order().totalAmount.toFixed(2) }}</span></div>
+         <div class="sum-row"><span>Amount Due</span><span>€{{ order().totalAmount.toFixed(2) }}</span></div>
       </div>
       @if (error()) {
          <div class="checkout-error">{{ error() }}</div>
@@ -20,7 +20,7 @@
          @if (isPaying()) {
             <i class="fas fa-spinner fa-spin"></i> Processing Payment...
          } @else {
-            <i class="fas fa-lock"></i> Pay ₹{{ payAmount }}
+            <i class="fas fa-lock"></i> Pay €{{ payAmount }}
          }
       </button>
       <button class="btn-back w-100 justify-content-center" (click)="cancel.emit()">Cancel</button>

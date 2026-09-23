@@ -1,0 +1,210 @@
+<div class="admin-details-head">
+   <a class="admin-btn admin-btn-outline" routerLink="/admin/orders">
+      <i class="fas fa-arrow-left"></i>
+      Back to Orders
+   </a>
+</div>
+
+@if (loading()) {
+   <div class="admin-card">
+      <div class="admin-empty">
+         <i class="fas fa-spinner fa-spin admin-empty-ico"></i>
+         <p>Loading order details...</p>
+      </div>
+   </div>
+} @else if (error()) {
+   <div class="admin-card">
+      <div class="admin-empty">
+         <i class="fas fa-exclamation-triangle admin-empty-ico" style="color:var(--primary)"></i>
+         <p>{{ error() }}</p>
+         <button class="admin-btn admin-btn-outline" (click)="load()">
+            <i class="fas fa-redo"></i> Retry
+         </button>
+      </div>
+   </div>
+} @else if (order(); as o) {
+   <div class="admin-details-grid">
+      <div class="admin-card">
+         <h3 class="admin-card-title">Customer</h3>
+
+         <div class="admin-info-list">
+            <div class="admin-info-row">
+               <span>Name</span>
+               <strong>{{ o.customerName }}</strong>
+            </div>
+            <div class="admin-info-row">
+               <span>Email</span>
+               <strong>{{ o.email }}</strong>
+            </div>
+            <div class="admin-info-row">
+               <span>Phone</span>
+               <strong>{{ o.phone }}</strong>
+            </div>
+            <div class="admin-info-row">
+               <span>Address</span>
+               <strong>{{ o.address }}</strong>
+            </div>
+         </div>
+      </div>
+
+      <div class="admin-card">
+         <h3 class="admin-card-title">Order Summary</h3>
+
+         <div class="admin-info-list">
+            <div class="admin-info-row">
+               <span>Order #</span>
+               <strong>#{{ o.id }}</strong>
+            </div>
+            <div class="admin-info-row">
+               <span>Placed on</span>
+               <strong>{{ o.createdAt | date: 'dd MMM yyyy, HH:mm' }}</strong>
+            </div>
+            <div class="admin-info-row">
+               <span>Order Status</span>
+               <span class="info-badge {{ statusClass(o.orderStatus) }}">
+                  {{ o.orderStatus }}
+               </span>
+            </div>
+            <div class="admin-info-row">
+               <span>Payment</span>
+               <span class="info-badge {{ statusClass(o.paymentStatus) }}">
+                  {{ o.paymentStatus }}
+               </span>
+            </div>
+            @if (o.paymentTransactionId) {
+               <div class="admin-info-row">
+                  <span>Transaction</span>
+                  <strong class="order-txid">{{ o.paymentTransactionId }}</strong>
+               </div>
+            }
+         </div>
+      </div>
+   </div>
+
+   <div class="admin-card admin-items-card">
+      <h3 class="admin-card-title">Items ({{ o.items?.length ?? 0 }})</h3>
+
+      <div class="admin-table-wrap">
+         <table class="admin-table">
+            <thead>
+               <tr>
+                  <th>Item</th>
+                  <th>Qty</th>
+                  <th>Unit Price</th>
+                  <th class="ta-r">Subtotal</th>
+               </tr>
+            </thead>
+            <tbody>
+               @for (item of o.items; track item.menuId) {
+                  <tr>
+                     <td class="order-item-name">{{ item.productName }}</td>
+                     <td>{{ item.quantity }}</td>
+                     <td>{{ unitPrice(item) }}</td>
+                     <td class="ta-r table-strong">{{ lineTotal(item) }}</td>
+                  </tr>
+               }
+            </tbody>
+            <tfoot>
+               <tr>
+                  <td colspan="3" class="ta-r order-total-label">Total</td>
+                  <td class="ta-r order-total-amount">{{ total(o) }}</td>
+               </tr>
+            </tfoot>
+         </table>
+      </div>
+   </div>
+
+   <div class="admin-card admin-items-card">
+      <div class="admin-card-head">
+         <h3 class="admin-card-title">Invoice</h3>
+         <div class="admin-invoice-actions">
+            <button class="admin-btn admin-btn-outline" (click)="printInvoice()">
+               <i class="fas fa-print"></i>
+               Print
+            </button>
+            <button
+               class="admin-btn admin-btn-primary"
+               (click)="downloadPdf()"
+               [disabled]="generatingPdf()"
+            >
+               @if (generatingPdf()) {
+                  <i class="fas fa-spinner fa-spin"></i>
+                  Generating...
+               } @else {
+                  <i class="fas fa-download"></i>
+                  Download PDF
+               }
+            </button>
+         </div>
+      </div>
+
+      <div class="invoice invoice-print-area" id="invoicePdfArea">
+         <div class="invoice-head">
+            <div>
+               <h3>INVOICE</h3>
+               <p class="invoice-no">{{ invoiceNumber }}</p>
+            </div>
+            <div class="invoice-brand">
+               <span>Sarab</span>
+               <small>Fast Food &amp; Restaurant</small>
+            </div>
+         </div>
+
+         <div class="invoice-meta">
+            <div class="invoice-block">
+               <h4>Billed To</h4>
+               <p class="invoice-name">{{ o.customerName }}</p>
+               <p>{{ o.email }}</p>
+               <p>{{ o.phone }}</p>
+               <p>{{ o.address }}</p>
+            </div>
+            <div class="invoice-block invoice-block-r">
+               <p><span>Order #</span><strong>{{ o.id }}</strong></p>
+               <p><span>Date</span>{{ o.createdAt | date: 'medium' }}</p>
+               <p><span>Status</span>{{ o.orderStatus }} / {{ o.paymentStatus }}</p>
+            </div>
+         </div>
+
+         <table class="invoice-table">
+            <thead>
+               <tr>
+                  <th>Item</th>
+                  <th>Qty</th>
+                  <th>Price</th>
+                  <th class="ta-r">Subtotal</th>
+               </tr>
+            </thead>
+            <tbody>
+               @for (item of o.items; track item.menuId) {
+                  <tr>
+                     <td>{{ item.productName }}</td>
+                     <td>{{ item.quantity }}</td>
+                     <td>{{ unitPrice(item) }}</td>
+                     <td class="ta-r">{{ lineTotal(item) }}</td>
+                  </tr>
+               }
+            </tbody>
+         </table>
+
+         <div class="invoice-total">
+            <div class="invoice-sum">
+               <span>Total</span>
+               <strong>{{ total(o) }}</strong>
+            </div>
+         </div>
+
+         <div class="invoice-pay">
+            <h4>Payment</h4>
+            <p><span>Status</span>{{ o.paymentStatus }}</p>
+            <p>
+               <span>Transaction</span>
+               {{ o.paymentTransactionId || '—' }}
+            </p>
+         </div>
+
+         <div class="invoice-foot">
+            <p>Thank you for choosing Sarab!</p>
+         </div>
+      </div>
+   </div>
+}

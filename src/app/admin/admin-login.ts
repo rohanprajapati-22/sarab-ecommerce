@@ -1,28 +1,25 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { AuthService, LoginRequest } from '../auth-service';
 
 @Component({
-  imports: [FormsModule, RouterLink, ReactiveFormsModule],
-  selector: 'app-login',
-  styleUrl: './login.css',
-  templateUrl: './login.html',
+  imports: [FormsModule, ReactiveFormsModule, RouterLink],
+  selector: 'app-admin-login',
+  styleUrl: './admin-login.css',
+  templateUrl: './admin-login.html',
   standalone: true,
 })
-export class Login implements OnInit {
+export class AdminLogin {
   readonly submitting = signal<boolean>(false);
   readonly error = signal<string>('');
 
   loginForm: FormGroup;
 
-  private redirectTo = '/';
-
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
-    private router: Router,
-    private route: ActivatedRoute
+    private router: Router
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -31,19 +28,18 @@ export class Login implements OnInit {
   }
 
   ngOnInit(): void {
-    const ret = this.route.snapshot.queryParamMap.get('return');
-    if (ret) {
-      this.redirectTo = ret;
+    if (this.auth.isAdmin()) {
+      this.router.navigate(['/admin']);
+    } else if (this.auth.isAuthenticated()) {
+      this.router.navigate(['/']);
     }
   }
 
   submit(): void {
-
     if (this.submitting()) return;
 
     this.error.set('');
 
-    // Validate form
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
@@ -57,19 +53,17 @@ export class Login implements OnInit {
     this.submitting.set(true);
 
     this.auth.login(loginRequest).subscribe({
-
       next: () => {
         this.submitting.set(false);
-        const target =
-          this.redirectTo === '/' && this.auth.isAdmin()
-            ? '/admin'
-            : this.redirectTo;
-        this.router.navigate([target]);
+        if (this.auth.isAdmin()) {
+          this.router.navigate(['/admin']);
+        } else {
+          this.error.set('This account does not have admin access.');
+          this.auth.logout();
+        }
       },
-
       error: (err) => {
         this.submitting.set(false);
-
         this.error.set(
           err?.error?.message ||
           err?.error?.title ||

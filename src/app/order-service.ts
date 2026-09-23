@@ -24,7 +24,7 @@ export interface OrderResponse {
 }
 
 export interface Order {
-  orderId: number;
+  id: number;
   customerName: string;
   email: string;
   phone: string;
@@ -32,15 +32,18 @@ export interface Order {
   totalAmount: number;
   orderStatus: string;
   paymentStatus: string;
-  orderDate: string;
+  createdAt: string;
+  paymentTransactionId?: string;
   items: OrderItem[];
 }
 
 export interface OrderItem {
+  id?: number;
   menuId: number;
-  menuName: string;
+  productName: string;
   quantity: number;
-  unitPrice: number;
+  price: number;
+  subtotal: number;
 }
 
 

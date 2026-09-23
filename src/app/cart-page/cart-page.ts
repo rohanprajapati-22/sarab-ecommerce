@@ -50,15 +50,15 @@ export class CartPage {
   }
 
   get subtotal(): string {
-    return '₹' + this.ui.cartTotal().toFixed(2);
+    return '€' + this.ui.cartTotal().toFixed(2);
   }
 
   get total(): string {
-    return '₹' + this.ui.cartTotal().toFixed(2);
+    return '€' + this.ui.cartTotal().toFixed(2);
   }
 
   lineTotal(ci: CartItem): string {
-    return '₹' + (this.ui.parsePrice(ci.item.price) * ci.qty).toFixed(2);
+    return '€' + (this.ui.parsePrice(ci.item.price) * ci.qty).toFixed(2);
   }
 
   changeQty(ci: CartItem, delta: number) {

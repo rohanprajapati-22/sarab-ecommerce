@@ -28,7 +28,8 @@ export class Register implements OnInit {
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', Validators.required]
+      confirmPassword: ['', Validators.required],
+      role: ['Customer']
     });
   }
 
@@ -51,7 +52,7 @@ export class Register implements OnInit {
       return;
     }
 
-    const { name, email, password, confirmPassword } =
+    const { name, email, password, confirmPassword, role } =
       this.registerForm.value;
 
     // Confirm password validation
@@ -65,13 +66,18 @@ export class Register implements OnInit {
     const registerRequest: RegisterRequest = {
       name: name.trim(),
       email: email.trim(),
-      password: password
+      password: password,
+      role: role || 'Customer'
     };
 
     this.auth.register(registerRequest).subscribe({
       next: () => {
         this.submitting.set(false);
-        this.router.navigate([this.redirectTo]);
+        const target =
+          this.redirectTo === '/' && this.auth.isAdmin()
+            ? '/admin'
+            : this.redirectTo;
+        this.router.navigate([target]);
       },
 
       error: (err) => {

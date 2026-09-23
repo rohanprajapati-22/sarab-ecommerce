@@ -1,7 +1,13 @@
-<app-navbar></app-navbar>
-<app-search-overlay></app-search-overlay>
-<app-menu-popup></app-menu-popup>
-<app-gallery-popup></app-gallery-popup>
+@if (!isAdminRoute()) {
+   <app-navbar></app-navbar>
+   <app-search-overlay></app-search-overlay>
+   <app-menu-popup></app-menu-popup>
+   <app-gallery-popup></app-gallery-popup>
+}
+
 <router-outlet />
-<app-cart-floating></app-cart-floating>
-<app-back-to-top></app-back-to-top>
+
+@if (!isAdminRoute()) {
+   <app-cart-floating></app-cart-floating>
+   <app-back-to-top></app-back-to-top>
+}

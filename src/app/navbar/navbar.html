@@ -44,12 +44,17 @@
          </ul>
          <div class="d-flex align-items-center gap-1">
             <button id="navSearchBtn" title="Search" (click)="openSearch()"><i class="fas fa-search"></i></button>
-           @if (auth.isAuthenticated()) {
-               <span class="nav-user" title="{{ auth.user()?.email }}"><i class="fas fa-user-circle"></i> {{ auth.user()?.name }}</span>
-               <button class="nav-auth-btn" title="Logout" (click)="logout()"><i class="fas fa-sign-out-alt"></i><span class="nav-auth-label">Logout</span></button>
-            } @else {
+             @if (auth.isAuthenticated()) {
+                @if (auth.isAdmin()) {
+                   <a class="nav-auth-btn nav-admin-btn" routerLink="/admin" title="Admin Panel">
+                      <i class="fas fa-user-shield"></i><span class="nav-auth-label">Admin</span>
+                   </a>
+                }
+                <span class="nav-user" title="{{ auth.user()?.email }}"><i class="fas fa-user-circle"></i> {{ auth.user()?.name }}</span>
+                <button class="nav-auth-btn" title="Logout" (click)="logout()"><i class="fas fa-sign-out-alt"></i><span class="nav-auth-label">Logout</span></button>
+             } @else {
                <button class="nav-auth-btn" (click)="goToLogin()"><i class="fas fa-user"></i><span class="nav-auth-label">Login</span></button>
-            } 
+            }  
 
          </div>
       </div>

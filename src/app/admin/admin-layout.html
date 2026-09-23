@@ -1,0 +1,64 @@
+<div class="admin-shell">
+   <aside class="admin-sidebar" [class.open]="mobileOpen">
+      <div class="admin-brand">
+         <div class="admin-brand-ico"><i class="fas fa-utensils"></i></div>
+         <div>
+            <div class="admin-brand-name">Sarab <span>Admin</span></div>
+            <div class="admin-brand-sub">Order Management</div>
+         </div>
+      </div>
+
+      <nav class="admin-nav">
+         <span class="admin-nav-label">Main</span>
+         <a
+            class="admin-nav-link"
+            routerLink="/admin/orders"
+            routerLinkActive="active"
+            (click)="closeMobile()"
+         >
+            <i class="fas fa-shopping-bag"></i>
+            Orders
+         </a>
+      </nav>
+
+      <div class="admin-side-foot">
+         <div class="admin-user">
+            <div class="admin-user-ava">
+               <i class="fas fa-user-shield"></i>
+            </div>
+            <div class="admin-user-meta">
+               <span>{{ name }}</span>
+               <small>Administrator</small>
+            </div>
+         </div>
+
+         <a class="admin-foot-link" routerLink="/" (click)="closeMobile()">
+            <i class="fas fa-store"></i>
+            View Store
+         </a>
+         <button class="admin-foot-link" (click)="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+         </button>
+      </div>
+   </aside>
+
+   <div class="admin-backdrop" [class.show]="mobileOpen" (click)="closeMobile()"></div>
+
+   <div class="admin-main">
+      <header class="admin-topbar">
+         <button class="admin-burger" (click)="toggleMobile()" aria-label="Menu">
+            <i class="fas fa-bars"></i>
+         </button>
+         <h1 class="admin-page-title">Admin Panel</h1>
+         <span class="admin-topbar-user">
+            <i class="fas fa-user-circle"></i>
+            {{ name }}
+         </span>
+      </header>
+
+      <main class="admin-content">
+         <router-outlet />
+      </main>
+   </div>
+</div>

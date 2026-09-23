@@ -44,8 +44,8 @@
                   <tr>
                      <td>{{ it.productName }}</td>
                      <td>{{ it.quantity }}</td>
-                     <td>₹{{ it.price.toFixed(2) }}</td>
-                     <td class="ta-r">₹{{ it.subtotal.toFixed(2) }}</td>
+                     <td>€{{ it.price.toFixed(2) }}</td>
+                     <td class="ta-r">€{{ it.subtotal.toFixed(2) }}</td>
                   </tr>
                }
             </tbody>
@@ -53,7 +53,7 @@
          <div class="inv-total">
             <div class="inv-sum">
                <span>Total</span>
-               <strong>₹{{ inv.totalAmount.toFixed(2) }}</strong>
+               <strong>€{{ inv.totalAmount.toFixed(2) }}</strong>
             </div>
          </div>
          @if (inv.payment; as pay) {
@@ -77,7 +77,7 @@
             <p>Generating your invoice...</p>
          } @else if (order(); as res) {
             <p>
-               Order #{{ res.orderId }} for ₹{{ res.totalAmount.toFixed(2) }} has been received.
+               Order #{{ res.orderId }} for €{{ res.totalAmount.toFixed(2) }} has been received.
                @if (payment(); as pay) {
                   Payment status: {{ pay.paymentStatus }}.
                } @else {
