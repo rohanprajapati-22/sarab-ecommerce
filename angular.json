@@ -51,6 +51,7 @@
               }
             ],
             "styles": [
+              "src/material-theme.scss",
               "public/css/bootstrap.min.css",
               "public/css/aos.css",
               "public/css/swiper-bundle.min.css",

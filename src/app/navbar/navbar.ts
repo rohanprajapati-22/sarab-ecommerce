@@ -4,7 +4,7 @@ import { UiService } from '../ui.service';
 import { AuthService } from '../auth-service';
 
 @Component({
-  imports: [],
+  imports: [RouterLink],
   selector: 'app-navbar',
   styleUrl: './navbar.css',
   templateUrl: './navbar.html',

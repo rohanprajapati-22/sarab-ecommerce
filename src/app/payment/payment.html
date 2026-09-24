@@ -1,28 +1,60 @@
 <div class="pay-layout">
    <div class="pay-panel">
-      <div class="pay-icon"><i class="fas fa-credit-card"></i></div>
-      <h3>Secure Payment</h3>
-      <div class="pay-order">
-         <div class="sum-row"><span>Order #</span><span>{{ order().orderId }}</span></div>
-         <div class="sum-row"><span>Amount Due</span><span>€{{ order().totalAmount.toFixed(2) }}</span></div>
-      </div>
-      @if (error()) {
-         <div class="checkout-error">{{ error() }}</div>
+      @if (blocked()) {
+         <div class="pay-blocked">
+            <div class="pay-icon pay-icon-danger">
+               @if (blocked() === 'expired') {
+                  <i class="fas fa-clock"></i>
+               } @else {
+                  <i class="fas fa-ban"></i>
+               }
+            </div>
+
+            <h3>
+               @if (blocked() === 'expired') {
+                  Order Expired
+               } @else {
+                  Order Cancelled
+               }
+            </h3>
+
+            <p class="pay-blocked-msg">
+               @if (blocked() === 'expired') {
+                  This order was not paid within the allowed time and has expired. Please place a new order.
+               } @else {
+                  This order is no longer active, so it cannot be paid. Please place a new order.
+               }
+            </p>
+
+            <button class="btn-checkout" (click)="cancel.emit()">
+               <i class="fas fa-utensils"></i> Back to Home
+            </button>
+         </div>
+      } @else {
+         <div class="pay-icon"><i class="fas fa-credit-card"></i></div>
+         <h3>Secure Payment</h3>
+         <div class="pay-order">
+            <div class="sum-row"><span>Order #</span><span>{{ order().orderId }}</span></div>
+            <div class="sum-row"><span>Amount Due</span><span>€{{ order().totalAmount.toFixed(2) }}</span></div>
+         </div>
+         @if (error()) {
+            <div class="checkout-error">{{ error() }}</div>
+         }
+         <div class="checkout-field">
+            <label class="flbl">Card Details *</label>
+            <div #cardElement class="stripe-card-element"></div>
+            @if (!cardReady()) {
+               <p class="pay-note"><i class="fas fa-spinner fa-spin"></i> Loading card form...</p>
+            }
+         </div>
+         <button class="btn-checkout" (click)="payNow()" [disabled]="isPaying() || !cardReady()">
+            @if (isPaying()) {
+               <i class="fas fa-spinner fa-spin"></i> Processing Payment...
+            } @else {
+               <i class="fas fa-lock"></i> Pay €{{ payAmount }}
+            }
+         </button>
+         <button class="btn-back w-100 justify-content-center" (click)="cancel.emit()">Cancel</button>
       }
-      <div class="checkout-field">
-         <label class="flbl">Card Details *</label>
-         <div #cardElement class="stripe-card-element"></div>
-         @if (!cardReady()) {
-            <p class="pay-note"><i class="fas fa-spinner fa-spin"></i> Loading card form...</p>
-         }
-      </div>
-      <button class="btn-checkout" (click)="payNow()" [disabled]="isPaying() || !cardReady()">
-         @if (isPaying()) {
-            <i class="fas fa-spinner fa-spin"></i> Processing Payment...
-         } @else {
-            <i class="fas fa-lock"></i> Pay €{{ payAmount }}
-         }
-      </button>
-      <button class="btn-back w-100 justify-content-center" (click)="cancel.emit()">Cancel</button>
    </div>
 </div>

@@ -7,6 +7,7 @@ import { PaymentResponse } from '../payment-service';
 import { Payment } from '../payment/payment';
 import { Invoice } from '../invoice/invoice';
 import { AuthService } from '../auth-service';
+import { SnackbarService } from '../snackbar.service';
 
 @Component({
   imports: [FormsModule, Payment, Invoice],
@@ -36,7 +37,8 @@ export class CartPage {
     public ui: UiService,
     private router: Router,
     private orderService: OrderService,
-    private auth: AuthService
+    private auth: AuthService,
+    private snackbar: SnackbarService
   ) {
     const user = this.auth.user();
     if (user) {
@@ -145,10 +147,13 @@ export class CartPage {
         this.orderResult.set(res);
         this.ui.clearCart();
         this.showPayment.set(true);
+        this.snackbar.success(`Order #${res.orderId} placed! Complete payment to confirm.`);
       },
       error: (err) => {
         this.isPlacing.set(false);
-        this.error.set(err?.error?.message || 'Unable to place your order. Please try again.');
+        const message = err?.error?.message || 'Unable to place your order. Please try again.';
+        this.error.set(message);
+        this.snackbar.error(message);
       },
     });
   }
@@ -157,9 +162,30 @@ export class CartPage {
     this.paymentResult.set(res);
     this.checkoutDone.set(true);
     this.showPayment.set(false);
+    this.snackbar.success('Payment successful! Your order is confirmed.');
   }
 
   goHome() {
     this.router.navigate(['/']);
+  }
+
+  cancelPayment() {
+    const res = this.orderResult();
+    const status = (res?.orderStatus ?? '').toLowerCase();
+
+    if (res && status === 'pending') {
+      this.orderService.updateOrderStatus(res.orderId, {
+        orderStatus: 'Cancelled',
+      }).subscribe({
+        next: () => {
+          this.snackbar.info(`Order #${res.orderId} has been cancelled.`);
+          this.goHome();
+        },
+        error: () => this.goHome(),
+      });
+      return;
+    }
+
+    this.goHome();
   }
 }

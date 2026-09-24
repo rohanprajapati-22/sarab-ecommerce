@@ -26,6 +26,25 @@
   margin: 0 auto 16px;
 }
 
+.pay-icon-danger {
+  background: linear-gradient(135deg, var(--primary), #c01408);
+}
+
+.pay-blocked {
+  text-align: center;
+  padding: 14px 0;
+}
+
+.pay-blocked h3 {
+  margin-bottom: 10px;
+}
+
+.pay-blocked-msg {
+  color: #8a857f;
+  font-size: 0.92rem;
+  margin-bottom: 24px;
+}
+
 .pay-panel h3 {
   text-align: center;
   font-size: 1.45rem;

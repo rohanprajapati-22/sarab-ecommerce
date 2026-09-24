@@ -15,7 +15,7 @@
             [payment]="paymentResult()"
          />
       } @else if (showPayment()) {
-         <app-payment [order]="orderResult()!" (paid)="onPaid($event)" (cancel)="goHome()" />
+         <app-payment [order]="orderResult()!" (paid)="onPaid($event)" (cancel)="cancelPayment()" />
       } @else if (showCheckout()) {
          <div class="checkout-layout">
             <div class="cart-list">

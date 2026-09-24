@@ -1,5 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
 
+/* Snackbar colors (used via SnackbarService) */
+.snackbar-success .mdc-snackbar__surface {
+  background: #1c8a50;
+}
+
+.snackbar-error .mdc-snackbar__surface {
+  background: var(--primary);
+}
+
+.snackbar-info .mdc-snackbar__surface {
+  background: var(--dark);
+}
+
+.mat-mdc-snack-bar-action {
+  color: #fff !important;
+  font-weight: 700;
+}
+
 /* print only the invoice when printInvoice() is triggered */
 @media print {
   body.invoice-print * {

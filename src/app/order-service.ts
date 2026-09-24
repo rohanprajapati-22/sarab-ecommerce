@@ -67,5 +67,15 @@ export class OrderService {
   getOrderById(id: number): Observable<Order> {
     return this.http.get<Order>(`${this.apiUrl}/${id}`);
   }
+
+  updateOrderStatus(
+    id: number,
+    status: { orderStatus: string; paymentStatus?: string }
+  ): Observable<{ message: string }> {
+    return this.http.put<{ message: string }>(
+      `${this.apiUrl}/${id}/status`,
+      status
+    );
+  }
 }
 

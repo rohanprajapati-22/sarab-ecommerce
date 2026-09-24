@@ -5,7 +5,9 @@ import { OrderService, Order } from '../../order-service';
 
 export function orderStatusClass(status: string): string {
   const s = (status || '').toLowerCase();
-  if (s.includes('cancel') || s.includes('refund')) return 'info-badge-danger';
+  if (s.includes('cancel') || s.includes('expired') || s.includes('refund') || s.includes('fail')) {
+    return 'info-badge-danger';
+  }
   if (s.includes('paid') || s.includes('complete') || s.includes('confirmed') || s.includes('delivered')) {
     return 'info-badge-success';
   }

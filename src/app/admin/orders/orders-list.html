@@ -66,13 +66,17 @@
                            {{ order.paymentStatus }}
                         </span>
                      </td>
+                    
                      <td class="ta-r">
+                         @if(order.orderStatus == 'Confirmed' && order.paymentStatus == 'Paid'){
                         <a
                            class="admin-btn admin-btn-sm"
                            [routerLink]="['/admin/orders/', order.id]"
                         >
                            <i class="fas fa-eye"></i> View
                         </a>
+                        }
+
                      </td>
                   </tr>
                }
