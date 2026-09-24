@@ -1,19 +1,19 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, RedirectCommand, Router } from '@angular/router';
-import { AuthService } from '../auth-service';
+import { AdminAuthService } from '../admin-auth-service';
 
 export const adminGuard: CanActivateFn = () => {
-  const auth = inject(AuthService);
+  const adminAuth = inject(AdminAuthService);
   const router = inject(Router);
 
-  if (!auth.isAuthenticated()) {
+  if (!adminAuth.isAdminAuthenticated()) {
     return new RedirectCommand(
       router.createUrlTree(['/admin/login']),
       { skipLocationChange: false }
     );
   }
 
-  if (!auth.isAdmin()) {
+  if (!adminAuth.isAdmin()) {
     return new RedirectCommand(
       router.createUrlTree(['/']),
       { skipLocationChange: false }

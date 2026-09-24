@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { AuthService } from '../auth-service';
+import { AdminAuthService } from '../admin-auth-service';
 
 @Component({
   imports: [RouterOutlet, RouterLink, RouterLinkActive],
@@ -10,16 +10,16 @@ import { AuthService } from '../auth-service';
   standalone: true,
 })
 export class AdminLayout {
+  mobileOpen = false;
+
   constructor(
-    private auth: AuthService,
+    private adminAuth: AdminAuthService,
     private router: Router
   ) {}
 
   get name(): string {
-    return this.auth.user()?.name ?? 'Admin';
+    return this.adminAuth.admin()?.name ?? 'Admin';
   }
-
-  mobileOpen = false;
 
   toggleMobile() {
     this.mobileOpen = !this.mobileOpen;
@@ -30,7 +30,7 @@ export class AdminLayout {
   }
 
   logout() {
-    this.auth.logout();
+    this.adminAuth.logout();
     this.router.navigate(['/']);
   }
 }

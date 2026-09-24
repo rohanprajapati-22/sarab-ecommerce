@@ -1,87 +1,125 @@
 <div class="admin-card">
-   <div class="admin-card-head">
-      <div>
-         <h2 class="admin-card-title">Orders</h2>
-         <p class="admin-card-sub">All customer orders placed on the store</p>
-      </div>
+  <div class="admin-card-head">
+    <div>
+      <h2 class="admin-card-title">Orders</h2>
+      <p class="admin-card-sub">All customer orders placed on the store</p>
+    </div>
 
-      @if (orders().length) {
-         <span class="admin-count-badge">{{ orders().length }} total</span>
+    @if (orders().length) {
+      <span class="admin-count-badge">{{ orders().length }} total</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <div class="admin-empty">
+      <i class="fas fa-spinner fa-spin admin-empty-ico"></i>
+      <p>Loading orders...</p>
+    </div>
+  } @else if (error()) {
+    <div class="admin-empty">
+      <i class="fas fa-exclamation-triangle admin-empty-ico" style="color: var(--primary)"></i>
+      <p>{{ error() }}</p>
+      <button class="admin-btn admin-btn-outline" (click)="load()">
+        <i class="fas fa-redo"></i> Retry
+      </button>
+    </div>
+  } @else if (!orders().length) {
+    <div class="admin-empty">
+      <i class="fas fa-box-open admin-empty-ico"></i>
+      <p>No orders have been placed yet.</p>
+    </div>
+  } @else {
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Sr No.</th>
+            <th>Order #</th>
+            <th>Customer</th>
+            <th>Date</th>
+            <th>Total</th>
+            <th>Order Status</th>
+            <th>Payment</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (order of paginatedOrders(); track order.id; let i = $index) {
+            <tr>
+                 <td>
+                 {{ (currentPage() - 1) * pageSize + i + 1 }}
+              </td>
+              <td>
+                <span class="order-id">#{{ order.id }}</span>
+              </td>
+
+              <td>
+                <div class="order-customer">
+                  <span class="order-customer-name">
+                    {{ order.customerName }}
+                  </span>
+                  <small>{{ order.email }}</small>
+                </div>
+              </td>
+
+              <td>
+                {{ order.createdAt | date: 'dd MMM yyyy, HH:mm' }}
+              </td>
+
+              <td class="table-strong">
+                {{ total(order) }}
+              </td>
+
+              <td>
+                <span class="info-badge {{ statusClass(order.orderStatus) }}">
+                  {{ order.orderStatus }}
+                </span>
+              </td>
+
+              <td>
+                <span class="info-badge {{ statusClass(order.paymentStatus) }}">
+                  {{ order.paymentStatus }}
+                </span>
+              </td>
+
+              <td class="ta-r">
+                @if (order.orderStatus == 'Confirmed' && order.paymentStatus == 'Paid') {
+                  <a class="admin-btn admin-btn-sm" [routerLink]="['/admin/orders/', order.id]">
+                    <i class="fas fa-eye"></i> View
+                  </a>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      @if (totalPages() > 1) {
+        <div class="pagination">
+          <button class="pagination-btn" [disabled]="currentPage() === 1" (click)="previousPage()">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+
+          @for (page of pageNumbers(); track page) {
+            <button
+              class="pagination-btn"
+              [class.active]="currentPage() === page"
+              (click)="goToPage(page)"
+            >
+              {{ page }}
+            </button>
+          }
+
+          <button
+            class="pagination-btn"
+            [disabled]="currentPage() === totalPages()"
+            (click)="nextPage()"
+          >
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
       }
-   </div>
-
-   @if (loading()) {
-      <div class="admin-empty">
-         <i class="fas fa-spinner fa-spin admin-empty-ico"></i>
-         <p>Loading orders...</p>
-      </div>
-   } @else if (error()) {
-      <div class="admin-empty">
-         <i class="fas fa-exclamation-triangle admin-empty-ico" style="color:var(--primary)"></i>
-         <p>{{ error() }}</p>
-         <button class="admin-btn admin-btn-outline" (click)="load()">
-            <i class="fas fa-redo"></i> Retry
-         </button>
-      </div>
-   } @else if (!orders().length) {
-      <div class="admin-empty">
-         <i class="fas fa-box-open admin-empty-ico"></i>
-         <p>No orders have been placed yet.</p>
-      </div>
-   } @else {
-      <div class="admin-table-wrap">
-         <table class="admin-table">
-            <thead>
-               <tr>
-                  <th>Order #</th>
-                  <th>Customer</th>
-                  <th>Date</th>
-                  <th>Total</th>
-                  <th>Order Status</th>
-                  <th>Payment</th>
-                  <th></th>
-               </tr>
-            </thead>
-            <tbody>
-               @for (order of orders(); track order.id) {
-                  <tr>
-                     <td>
-                        <span class="order-id">#{{ order.id }}</span>
-                     </td>
-                     <td>
-                        <div class="order-customer">
-                           <span class="order-customer-name">{{ order.customerName }}</span>
-                           <small>{{ order.email }}</small>
-                        </div>
-                     </td>
-                     <td>{{ order.createdAt | date: 'dd MMM yyyy, HH:mm' }}</td>
-                     <td class="table-strong">{{ total(order) }}</td>
-                     <td>
-                        <span class="info-badge {{ statusClass(order.orderStatus) }}">
-                           {{ order.orderStatus }}
-                        </span>
-                     </td>
-                     <td>
-                        <span class="info-badge {{ statusClass(order.paymentStatus) }}">
-                           {{ order.paymentStatus }}
-                        </span>
-                     </td>
-                    
-                     <td class="ta-r">
-                         @if(order.orderStatus == 'Confirmed' && order.paymentStatus == 'Paid'){
-                        <a
-                           class="admin-btn admin-btn-sm"
-                           [routerLink]="['/admin/orders/', order.id]"
-                        >
-                           <i class="fas fa-eye"></i> View
-                        </a>
-                        }
-
-                     </td>
-                  </tr>
-               }
-            </tbody>
-         </table>
-      </div>
-   }
+    </div>
+  }
 </div>

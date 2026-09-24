@@ -52,9 +52,10 @@
                 }
                 <span class="nav-user" title="{{ auth.user()?.email }}"><i class="fas fa-user-circle"></i> {{ auth.user()?.name }}</span>
                 <button class="nav-auth-btn" title="Logout" (click)="logout()"><i class="fas fa-sign-out-alt"></i><span class="nav-auth-label">Logout</span></button>
-             } @else {
-                <button class="nav-auth-btn" (click)="goToLogin()"><i class="fas fa-user"></i><span class="nav-auth-label">Login</span></button>
              } 
+             <!-- @else {
+                <button class="nav-auth-btn" (click)="goToLogin()"><i class="fas fa-user"></i><span class="nav-auth-label">Login</span></button>
+             }  -->
 
          </div>
       </div>

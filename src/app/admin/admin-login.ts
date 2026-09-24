@@ -1,7 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
-import { AuthService, LoginRequest } from '../auth-service';
+import { AdminAuthService } from '../admin-auth-service';
+import { LoginRequest } from '../auth-service';
 
 @Component({
   imports: [FormsModule, ReactiveFormsModule, RouterLink],
@@ -16,11 +17,11 @@ export class AdminLogin {
 
   loginForm: FormGroup;
 
-  constructor(
-    private fb: FormBuilder,
-    private auth: AuthService,
-    private router: Router
-  ) {
+  private fb = inject(FormBuilder);
+  private adminAuth = inject(AdminAuthService);
+  private router = inject(Router);
+
+  constructor() {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
@@ -28,9 +29,9 @@ export class AdminLogin {
   }
 
   ngOnInit(): void {
-    if (this.auth.isAdmin()) {
+    if (this.adminAuth.isAdmin()) {
       this.router.navigate(['/admin']);
-    } else if (this.auth.isAuthenticated()) {
+    } else if (this.adminAuth.isAdminAuthenticated()) {
       this.router.navigate(['/']);
     }
   }
@@ -52,14 +53,14 @@ export class AdminLogin {
 
     this.submitting.set(true);
 
-    this.auth.login(loginRequest).subscribe({
+    this.adminAuth.login(loginRequest).subscribe({
       next: () => {
         this.submitting.set(false);
-        if (this.auth.isAdmin()) {
+        if (this.adminAuth.isAdmin()) {
           this.router.navigate(['/admin']);
         } else {
           this.error.set('This account does not have admin access.');
-          this.auth.logout();
+          this.adminAuth.logout();
         }
       },
       error: (err) => {
