@@ -29,9 +29,22 @@ export class AdminAuthService {
   readonly isAdmin = computed(() => isAdminRole(this.admin()?.role));
 
   constructor() {
-    // Admin session is intentionally kept in memory only (not restored from
-    // localStorage), so every visit to /admin/orders requires an explicit
-    // admin login instead of silently resuming an old session.
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const token = window.localStorage.getItem(this.TOKEN_KEY);
+      const raw = window.localStorage.getItem(this.USER_KEY);
+      if (token && raw) {
+        try {
+          const parsed = JSON.parse(raw) as AuthResponse;
+          if (token === parsed.token || !parsed.token) {
+            this.admin.set({ ...parsed, token });
+            return;
+          }
+        } catch {
+          // fall through and clear the stale session
+        }
+        this.clearAdmin();
+      }
+    }
   }
 
   login(data: LoginRequest): Observable<AuthResponse> {

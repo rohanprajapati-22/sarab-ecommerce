@@ -37,7 +37,7 @@ export class MenuService {
     return this.http.get<MenuItem[]>(this.apiUrl);
   }
 
-    sendContactMessage(data: ContactMessage): Observable<ContactResponse> {
+  sendContactMessage(data: ContactMessage): Observable<ContactResponse> {
     return this.http.post<ContactResponse>(
       `/api/Contact`,
       data

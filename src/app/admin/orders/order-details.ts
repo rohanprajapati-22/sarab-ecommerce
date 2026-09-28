@@ -95,8 +95,10 @@ export class OrderDetails {
         logging: false,
       });
       const imgData = canvas.toDataURL('image/png');
+      const orientation =
+        canvas.width > canvas.height ? 'landscape' : 'portrait';
       const pdf = new jsPDF({
-        orientation: 'portrait',
+        orientation,
         unit: 'px',
         format: [canvas.width, canvas.height],
       });

@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ContactMessage, MenuService } from '../menu.service';
+import { SnackbarService } from '../snackbar.service';
 
 @Component({
   selector: 'app-contact',
@@ -24,6 +25,7 @@ export class Contact {
   constructor(
     private menuService: MenuService,
     private cdr: ChangeDetectorRef,
+     private snackbar: SnackbarService
   ) {}
 
   send(): void {
@@ -36,17 +38,20 @@ export class Contact {
 
     // Validation
     if (!this.contactData.name.trim()) {
-      alert('Please enter your name.');
+      // alert('Please enter your name.');
+       this.snackbar.error('Please enter your name.');
       return;
     }
 
     if (!this.contactData.email.trim()) {
-      alert('Please enter your email address.');
+      // alert('Please enter your email address.');
+      this.snackbar.error('Please enter your email address.');
       return;
     }
 
     if (!this.contactData.message.trim()) {
-      alert('Please enter your message.');
+      // alert('Please enter your message.');
+       this.snackbar.error('Please enter your message.');
       return;
     }
 
