@@ -1,4 +1,10 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+} from '@angular/core';
 
 @Component({
   imports: [],
@@ -6,17 +12,16 @@ import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRe
   styleUrl: './special-offer.css',
   templateUrl: './special-offer.html',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SpecialOffer implements OnInit, OnDestroy {
   h = 8;
   m = 45;
   s = 30;
   private timer: any;
-  constructor(private cd: ChangeDetectorRef){}
+  constructor(private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.cd.detectChanges();
     this.timer = setInterval(() => {
       this.s--;
       if (this.s < 0) {
@@ -32,9 +37,10 @@ export class SpecialOffer implements OnInit, OnDestroy {
         this.m = 45;
         this.s = 30;
       }
+      this.cd.detectChanges();
     }, 1000);
-     this.cd.detectChanges();
   }
+  
   pad(v: number): string {
     return String(v).padStart(2, '0');
   }

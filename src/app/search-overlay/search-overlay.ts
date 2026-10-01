@@ -15,7 +15,6 @@ export class SearchOverlay {
 
   constructor(public ui: UiService) {}
 
-  // Fill the search box when a trending tag is clicked
   trend(text: string) {
     this.query = text;
   }

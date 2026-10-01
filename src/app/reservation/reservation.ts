@@ -1,6 +1,5 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { finalize } from 'rxjs';
 import { MenuService, ReservationData, ReservationResponse } from '../menu.service';
 
 @Component({
@@ -10,9 +9,10 @@ import { MenuService, ReservationData, ReservationResponse } from '../menu.servi
   templateUrl: './reservation.html',
   standalone: true,
 })
-export class Reservation {
+export class Reservation implements OnDestroy {
   ok: boolean = false;
   isReserving: boolean = false;
+  private successTimeout?: ReturnType<typeof setTimeout>;
 
   reservationData: ReservationData = {
     fullName: '',
@@ -25,6 +25,12 @@ export class Reservation {
   };
 
   constructor(private menuService: MenuService,private cdr: ChangeDetectorRef) {}
+
+  ngOnDestroy(): void {
+    if (this.successTimeout) {
+      clearTimeout(this.successTimeout);
+    }
+  }
 
   reserve(): void {
 
@@ -76,6 +82,14 @@ export class Reservation {
 
         this.ok = true;
         this.cdr.detectChanges();
+
+        if (this.successTimeout) {
+          clearTimeout(this.successTimeout);
+        }
+        this.successTimeout = setTimeout(() => {
+          this.ok = false;
+          this.cdr.detectChanges();
+        }, 3000);
 
         this.reservationData = {
           fullName: '',

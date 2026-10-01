@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ContactMessage, MenuService } from '../menu.service';
 import { SnackbarService } from '../snackbar.service';
@@ -10,9 +10,10 @@ import { SnackbarService } from '../snackbar.service';
   templateUrl: './contact.html',
   styleUrl: './contact.css',
 })
-export class Contact {
+export class Contact implements OnDestroy {
   ok = false;
   isSending = false;
+  private successTimeout?: ReturnType<typeof setTimeout>;
 
   contactData: ContactMessage = {
     name: '',
@@ -28,13 +29,16 @@ export class Contact {
      private snackbar: SnackbarService
   ) {}
 
+  ngOnDestroy(): void {
+    if (this.successTimeout) {
+      clearTimeout(this.successTimeout);
+    }
+  }
+
   send(): void {
     if (this.isSending) {
       return;
     }
-
-    // Hide previous success message
-    this.ok = false;
 
     // Validation
     if (!this.contactData.name.trim()) {
@@ -76,14 +80,16 @@ export class Contact {
         // Stop sending
         this.isSending = false;
 
-        // Show success message
         this.ok = true;
-        setTimeout(() => { 
-          this.ok = false; 
-        }, 3000);
-
-        // Force Angular to update the UI
         this.cdr.detectChanges();
+
+        if (this.successTimeout) {
+          clearTimeout(this.successTimeout);
+        }
+        this.successTimeout = setTimeout(() => {
+          this.ok = false;
+          this.cdr.detectChanges();
+        }, 3000);
 
       },
 
@@ -91,8 +97,6 @@ export class Contact {
         console.error('API ERROR:', error);
 
         this.isSending = false;
-        this.ok = false;
-
         // Update UI
         this.cdr.detectChanges();
 

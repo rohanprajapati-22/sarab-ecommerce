@@ -156,7 +156,7 @@
               ></textarea>
             </div>
 
-              <!-- SEND BUTTON + SUCCESS MESSAGE -->
+              <!-- SEND BUTTON -->
               <div class="col-12 d-flex align-items-center gap-3">
 
                 <button
@@ -169,17 +169,16 @@
                   Send Message
                 </button>
 
-                @if (ok) {
-                  <div class="sucmsg">
-                    <i class="fas fa-check-circle"></i>
-                    <span>Message sent!</span>
-                  </div>
-                }
-
               </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+  @if (ok) {
+    <div class="contact-snackbar" role="status" aria-live="polite">
+      <i class="fas fa-check-circle" aria-hidden="true"></i>
+      <span>Message sent!</span>
+    </div>
+  }
 </section>

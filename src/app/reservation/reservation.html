@@ -209,24 +209,15 @@
                </div>
 
 
-               <!-- Success -->
-               @if (ok) {
-
-               <div class="sucmsg">
-
-                  <i class="fas fa-check-circle"></i>
-
-                  <p>
-                     Table reserved! We'll confirm via email shortly.
-                  </p>
-
-               </div>
-
-               }
-
             </div>
 
          </div>
       </div>
    </div>
+   @if (ok) {
+      <div class="reservation-snackbar" role="status" aria-live="polite">
+         <i class="fas fa-check-circle" aria-hidden="true"></i>
+         <span>Reservation request sent! We'll confirm via email shortly.</span>
+      </div>
+   }
 </section>
