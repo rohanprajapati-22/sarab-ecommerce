@@ -7,6 +7,7 @@ import { AdminLayout } from './admin/admin-layout';
 import { AdminLogin } from './admin/admin-login';
 import { OrdersList } from './admin/orders/orders-list';
 import { OrderDetails } from './admin/orders/order-details';
+import { MenuManagement } from './admin/menu/menu-management';
 import { adminGuard } from './admin/admin.guard';
 
 export const routes: Routes = [
@@ -22,6 +23,7 @@ export const routes: Routes = [
       { path: '', redirectTo: 'orders', pathMatch: 'full' },
       { path: 'orders', component: OrdersList },
       { path: 'orders/:id', component: OrderDetails },
+      { path: 'menu', component: MenuManagement },
     ],
   },
   { path: 'admin/login', component: AdminLogin },

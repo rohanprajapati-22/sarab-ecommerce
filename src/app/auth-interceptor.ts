@@ -9,6 +9,11 @@ function isAdminEndpoint(req: HttpRequest<unknown>): boolean {
   const method = req.method.toUpperCase();
   const url = req.url;
 
+  if (url.includes('/api/Menu/admin') || url.includes('/api/Menu/images') ||
+      (url.includes('/api/Menu') && method !== 'GET')) {
+    return true;
+  }
+
   if (
     (url.startsWith('/api/Order') || url.includes('/api/Order')) &&
     method !== 'POST'

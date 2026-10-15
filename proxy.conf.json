@@ -3,5 +3,10 @@
     "target": "https://localhost:7204",
     "secure": false,
     "changeOrigin": true
+  },
+  "/images": {
+    "target": "https://localhost:7204",
+    "secure": false,
+    "changeOrigin": true
   }
 }
