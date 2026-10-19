@@ -3,8 +3,8 @@
    <div class="sovbox">
       <h4>What are you craving today?</h4>
       <div class="sovinput">
-         <input type="text" id="searchInput" placeholder="Search burgers, pizza, chicken..." autocomplete="off" [(ngModel)]="query"/>
-         <button><i class="fas fa-search"></i></button>
+         <input type="search" id="searchInput" placeholder="Search burgers, pizza, chicken..." autocomplete="off" [(ngModel)]="query" (ngModelChange)="setQuery($event)" (keyup.enter)="applySearch()"/>
+         <button type="button" aria-label="Show search results" (click)="applySearch()"><i class="fas fa-search"></i></button>
       </div>
       <div class="sovcats">
          <div class="sovcat" [class.active]="ui.activeCategory()==='all'" (click)="select('all')"><img src="img/menu/1.jpg" alt=""/>All Items</div>

@@ -1,6 +1,7 @@
-import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MenuService, ReservationData, ReservationResponse } from '../menu.service';
+import { ToastService } from '../toast.service';
 
 @Component({
   imports: [FormsModule],
@@ -9,10 +10,8 @@ import { MenuService, ReservationData, ReservationResponse } from '../menu.servi
   templateUrl: './reservation.html',
   standalone: true,
 })
-export class Reservation implements OnDestroy {
-  ok: boolean = false;
-  isReserving: boolean = false;
-  private successTimeout?: ReturnType<typeof setTimeout>;
+export class Reservation {
+  readonly isReserving = signal(false);
 
   reservationData: ReservationData = {
     fullName: '',
@@ -24,72 +23,53 @@ export class Reservation implements OnDestroy {
     specialRequests: ''
   };
 
-  constructor(private menuService: MenuService,private cdr: ChangeDetectorRef) {}
-
-  ngOnDestroy(): void {
-    if (this.successTimeout) {
-      clearTimeout(this.successTimeout);
-    }
-  }
+  constructor(private menuService: MenuService, private toaster: ToastService) {}
 
   reserve(): void {
 
-    if (this.isReserving) {
+    if (this.isReserving()) {
       return;
     }
 
-    this.ok = false;
-
     // Validation
     if (!this.reservationData.fullName.trim()) {
-      alert('Please enter your full name.');
+      this.toaster.error('Please enter your full name.');
       return;
     }
 
     if (!this.reservationData.phone.trim()) {
-      alert('Please enter your phone number.');
+      this.toaster.error('Please enter your phone number.');
       return;
     }
 
     if (!this.reservationData.email.trim()) {
-      alert('Please enter your email address.');
+      this.toaster.error('Please enter your email address.');
       return;
     }
 
     if (!this.reservationData.numberOfGuests) {
-      alert('Please select number of guests.');
+      this.toaster.error('Please select number of guests.');
       return;
     }
 
     if (!this.reservationData.reservationDate) {
-      alert('Please select reservation date.');
+      this.toaster.error('Please select reservation date.');
       return;
     }
 
     if (!this.reservationData.reservationTime) {
-      alert('Please select reservation time.');
+      this.toaster.error('Please select reservation time.');
       return;
     }
 
-    this.isReserving = true;
-    this.cdr.detectChanges();
+    this.isReserving.set(true);
 
     this.menuService.reserveTable(this.reservationData).subscribe({
       
       next: (response: ReservationResponse) => {
 
-        this.isReserving = false;
-
-        this.ok = true;
-        this.cdr.detectChanges();
-
-        if (this.successTimeout) {
-          clearTimeout(this.successTimeout);
-        }
-        this.successTimeout = setTimeout(() => {
-          this.ok = false;
-          this.cdr.detectChanges();
-        }, 3000);
+        this.isReserving.set(false);
+        this.toaster.success(`Reservation request sent${response?.id ? ` (#${response.id})` : ''}. We'll confirm shortly.`);
 
         this.reservationData = {
           fullName: '',
@@ -100,16 +80,11 @@ export class Reservation implements OnDestroy {
           reservationTime: '09:00 AM',
           specialRequests: ''
         };
-         this.cdr.detectChanges();
       },
 
       error: (error) => {
-        this.isReserving = false;
-
-        this.ok = false;
-         this.cdr.detectChanges();
-
-        alert(
+        this.isReserving.set(false);
+        this.toaster.error(
           error?.error?.message ||
           'Unable to create reservation. Please try again.'
         );

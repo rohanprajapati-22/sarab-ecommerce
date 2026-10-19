@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService, RegisterRequest } from '../auth-service';
+import { ToastService } from '../toast.service';
 
 @Component({
   imports: [FormsModule, RouterLink, ReactiveFormsModule],
@@ -21,6 +22,7 @@ export class Register implements OnInit {
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
+    private toaster: ToastService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -73,6 +75,7 @@ export class Register implements OnInit {
     this.auth.register(registerRequest).subscribe({
       next: () => {
         this.submitting.set(false);
+        this.toaster.success('Your account has been created.');
         const target =
           this.redirectTo === '/' && this.auth.isAdmin()
             ? '/admin'

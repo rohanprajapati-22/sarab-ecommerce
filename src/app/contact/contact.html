@@ -163,10 +163,15 @@
                   type="button"
                   class="btn-red"
                   (click)="send()"
-                  [disabled]="isSending"
+                  [disabled]="isSending()"
                 >
-                  <i class="fas fa-paper-plane"></i>
-                  Send Message
+                  @if (isSending()) {
+                    <i class="fas fa-spinner fa-spin"></i>
+                    Sending…
+                  } @else {
+                    <i class="fas fa-paper-plane"></i>
+                    Send Message
+                  }
                 </button>
 
               </div>
@@ -175,10 +180,4 @@
       </div>
     </div>
   </div>
-  @if (ok) {
-    <div class="contact-snackbar" role="status" aria-live="polite">
-      <i class="fas fa-check-circle" aria-hidden="true"></i>
-      <span>Message sent!</span>
-    </div>
-  }
 </section>

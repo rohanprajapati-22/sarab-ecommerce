@@ -1,5 +1,6 @@
 import { Component, effect } from '@angular/core';
 import { UiService, MenuItem } from '../ui.service';
+import { ToastService } from '../toast.service';
 
 @Component({
   imports: [],
@@ -11,7 +12,7 @@ import { UiService, MenuItem } from '../ui.service';
 export class MenuPopup {
   qty = 1;
 
-  constructor(public ui: UiService) {
+  constructor(public ui: UiService, private toaster: ToastService) {
     effect(() => {
       if (this.ui.menuPopupOpen()) {
         this.qty = 1;
@@ -52,6 +53,7 @@ export class MenuPopup {
   addCart() {
     if (!this.item) return;
     this.ui.addToCart(this.item, this.qty);
+    this.toaster.success(`${this.qty} × ${this.item.title} added to cart.`);
     const btn = document.getElementById('mpAddCart');
     if (btn) {
       btn.innerHTML = '<i class="fas fa-check"></i> Added to Cart!';

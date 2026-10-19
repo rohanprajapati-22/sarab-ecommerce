@@ -1,7 +1,7 @@
-import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ContactMessage, MenuService } from '../menu.service';
-import { SnackbarService } from '../snackbar.service';
+import { ToastService } from '../toast.service';
 
 @Component({
   selector: 'app-contact',
@@ -10,10 +10,8 @@ import { SnackbarService } from '../snackbar.service';
   templateUrl: './contact.html',
   styleUrl: './contact.css',
 })
-export class Contact implements OnDestroy {
-  ok = false;
-  isSending = false;
-  private successTimeout?: ReturnType<typeof setTimeout>;
+export class Contact {
+  readonly isSending = signal(false);
 
   contactData: ContactMessage = {
     name: '',
@@ -25,41 +23,31 @@ export class Contact implements OnDestroy {
 
   constructor(
     private menuService: MenuService,
-    private cdr: ChangeDetectorRef,
-     private snackbar: SnackbarService
+    private toaster: ToastService
   ) {}
 
-  ngOnDestroy(): void {
-    if (this.successTimeout) {
-      clearTimeout(this.successTimeout);
-    }
-  }
-
   send(): void {
-    if (this.isSending) {
+    if (this.isSending()) {
       return;
     }
 
     // Validation
     if (!this.contactData.name.trim()) {
-      // alert('Please enter your name.');
-       this.snackbar.error('Please enter your name.');
+      this.toaster.error('Please enter your name.');
       return;
     }
 
     if (!this.contactData.email.trim()) {
-      // alert('Please enter your email address.');
-      this.snackbar.error('Please enter your email address.');
+      this.toaster.error('Please enter your email address.');
       return;
     }
 
     if (!this.contactData.message.trim()) {
-      // alert('Please enter your message.');
-       this.snackbar.error('Please enter your message.');
+      this.toaster.error('Please enter your message.');
       return;
     }
 
-    this.isSending = true;
+    this.isSending.set(true);
 
     // Make a copy of the data being sent
     const messageToSend: ContactMessage = {
@@ -78,29 +66,18 @@ export class Contact implements OnDestroy {
         };
 
         // Stop sending
-        this.isSending = false;
-
-        this.ok = true;
-        this.cdr.detectChanges();
-
-        if (this.successTimeout) {
-          clearTimeout(this.successTimeout);
-        }
-        this.successTimeout = setTimeout(() => {
-          this.ok = false;
-          this.cdr.detectChanges();
-        }, 3000);
+        this.isSending.set(false);
+        this.toaster.success('Your message has been sent. We’ll get back to you soon.');
 
       },
 
       error: (error) => {
         console.error('API ERROR:', error);
 
-        this.isSending = false;
-        // Update UI
-        this.cdr.detectChanges();
-
-        alert('Unable to send your message. Please try again.');
+        this.isSending.set(false);
+        this.toaster.error(
+          error?.error?.message || 'Unable to send your message. Please try again.'
+        );
       },
     });
   }

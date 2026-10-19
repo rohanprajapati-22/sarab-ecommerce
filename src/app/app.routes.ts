@@ -9,12 +9,14 @@ import { OrdersList } from './admin/orders/orders-list';
 import { OrderDetails } from './admin/orders/order-details';
 import { MenuManagement } from './admin/menu/menu-management';
 import { adminGuard } from './admin/admin.guard';
+import { OrderConfirmation } from './order-confirmation/order-confirmation';
 
 export const routes: Routes = [
   { path: '', component: Home },
   { path: 'cart', component: CartPage },
   { path: 'login', component: Login },
   { path: 'register', component: Register },
+  { path: 'order-confirmation/:id', component: OrderConfirmation },
   {
     path: 'admin',
     canActivate: [adminGuard],

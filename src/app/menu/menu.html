@@ -5,14 +5,24 @@
          <h2 class="stitle">Our Delicious <span>Menu</span></h2>
          <div class="sline"></div>
       </div>
-      <div class="text-center mb-4" data-aos="fade-up">
+      <div class="menu-tools mb-4" data-aos="fade-up">
+         <label class="menu-search">
+            <i class="fas fa-search" aria-hidden="true"></i>
+            <input type="search" placeholder="Search dishes, ingredients, or tags..."
+                   aria-label="Search menu items" [value]="ui.menuSearchQuery()"
+                   (input)="setSearchQuery($event)" />
+            @if (ui.menuSearchQuery()) {
+               <button type="button" aria-label="Clear menu search"
+                       (click)="ui.menuSearchQuery.set('')"><i class="fas fa-times"></i></button>
+            }
+         </label>
+         <div class="menu-filters" role="group" aria-label="Filter menu by category">
          <button class="filtbtn" [class.active]="filter==='all'" (click)="setFilter('all')">All</button>
-         <button class="filtbtn" [class.active]="filter==='burgers'" (click)="setFilter('burgers')">Burgers</button>
-         <button class="filtbtn" [class.active]="filter==='pizza'" (click)="setFilter('pizza')">Pizza</button>
-         <button class="filtbtn" [class.active]="filter==='chicken'" (click)="setFilter('chicken')">Chicken</button>
-         <button class="filtbtn" [class.active]="filter==='wraps'" (click)="setFilter('wraps')">Wraps</button>
-         <button class="filtbtn" [class.active]="filter==='desserts'" (click)="setFilter('desserts')">Desserts</button>
-         <button class="filtbtn" [class.active]="filter==='pasta'" (click)="setFilter('pasta')">Pasta</button>
+         @for (category of categories(); track category) {
+            <button class="filtbtn" [class.active]="filter===category.toLowerCase()"
+                    (click)="setFilter(category.toLowerCase())">{{ categoryLabel(category) }}</button>
+         }
+         </div>
       </div>
       <div class="row g-4" id="mgrid">
          @if (loading()) {
@@ -25,7 +35,7 @@
             </div>
          } @else if (visibleItems().length === 0) {
             <div class="col-12 text-center py-5">
-               <p>No items found for this category.</p>
+               <p>No menu items match your search and category. Try changing your search or filter.</p>
             </div>
          } @else {
             @for (item of visibleItems(); track item.title) {

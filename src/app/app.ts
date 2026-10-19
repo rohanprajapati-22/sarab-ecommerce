@@ -9,6 +9,7 @@ import { GalleryPopup } from './gallery-popup/gallery-popup';
 import { CartFloating } from './cart-floating/cart-floating';
 import { BackToTop } from './back-to-top/back-to-top';
 import { UiService } from './ui.service';
+import { ToastOutlet } from './toast-outlet/toast-outlet';
 
 declare const AOS: any;
 
@@ -20,6 +21,7 @@ declare const AOS: any;
     GalleryPopup,
     CartFloating,
     BackToTop,
+    ToastOutlet,
     RouterOutlet,
   ],
   selector: 'app-root',

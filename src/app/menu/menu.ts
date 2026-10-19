@@ -15,6 +15,9 @@ export class Menu {
 
   readonly loading = signal<boolean>(true);
   readonly error = signal<string>('');
+  readonly categories = computed(() => [
+    ...new Set(this.allItems().map((item) => item.category.trim()).filter(Boolean)),
+  ].sort((a, b) => a.localeCompare(b)));
 
   constructor(public ui: UiService) {
     this.fetchItems();
@@ -38,14 +41,30 @@ export class Menu {
     return this.ui.activeCategory();
   }
 
-  // Recomputes the visible list whenever the filter changes
+  // Recomputes the visible list whenever the category or search changes.
   visibleItems = computed<MenuItem[]>(() => {
-    const cat = this.ui.activeCategory();
-    return cat === 'all' ? this.allItems() : this.allItems().filter((i) => i.category === cat);
+    const category = this.ui.activeCategory().toLowerCase();
+    const query = this.ui.menuSearchQuery().trim().toLowerCase();
+
+    return this.allItems().filter((item) => {
+      const matchesCategory = category === 'all' || item.category.toLowerCase() === category;
+      const searchableText = [item.title, item.category, item.description, ...item.tags]
+        .join(' ')
+        .toLowerCase();
+      return matchesCategory && (!query || searchableText.includes(query));
+    });
   });
 
   setFilter(cat: string) {
     this.ui.activeCategory.set(cat);
+  }
+
+  setSearchQuery(event: Event): void {
+    this.ui.menuSearchQuery.set((event.target as HTMLInputElement).value);
+  }
+
+  categoryLabel(category: string): string {
+    return category.charAt(0).toUpperCase() + category.slice(1);
   }
 
   shortDesc(item: MenuItem): string {

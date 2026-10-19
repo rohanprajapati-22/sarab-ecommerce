@@ -3,6 +3,8 @@ import { DatePipe } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { OrderService, Order, OrderItem } from '../../order-service';
 import { orderStatusClass } from './orders-list';
+import { InvoicePdfService } from '../../invoice-pdf.service';
+import { ToastService } from '../../toast.service';
 
 @Component({
   imports: [RouterLink, DatePipe],
@@ -22,6 +24,8 @@ export class OrderDetails {
   constructor(
     route: ActivatedRoute,
     private orderService: OrderService,
+    private invoicePdf: InvoicePdfService,
+    private toaster: ToastService,
   ) {
     this.orderId = Number(route.snapshot.paramMap.get('id'));
     this.load();
@@ -82,28 +86,26 @@ export class OrderDetails {
 
   async downloadPdf(): Promise<void> {
     const order = this.order();
-    const el = document.getElementById('invoicePdfArea');
-    if (!order || !el || this.generatingPdf()) return;
+    if (!order || this.generatingPdf()) return;
 
     this.generatingPdf.set(true);
     try {
-      const jsPDF = (await import('jspdf')).jsPDF;
-      const html2canvas = (await import('html2canvas')).default;
-      const canvas = await html2canvas(el, {
-        scale: 2,
-        backgroundColor: '#ffffff',
-        logging: false,
+      await this.invoicePdf.download({
+        invoiceNumber: this.invoiceNumber,
+        orderId: order.id,
+        customerName: order.customerName,
+        email: order.email,
+        phone: order.phone,
+        address: order.address,
+        orderDate: order.createdAt,
+        orderStatus: order.orderStatus,
+        paymentStatus: order.paymentStatus,
+        items: order.items ?? [],
+        totalAmount: order.totalAmount,
       });
-      const imgData = canvas.toDataURL('image/png');
-      const orientation =
-        canvas.width > canvas.height ? 'landscape' : 'portrait';
-      const pdf = new jsPDF({
-        orientation,
-        unit: 'px',
-        format: [canvas.width, canvas.height],
-      });
-      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
-      pdf.save(`${this.invoiceNumber}.pdf`);
+      this.toaster.success('Invoice PDF downloaded.');
+    } catch {
+      this.toaster.error('Could not create the invoice PDF. Please try again.');
     } finally {
       this.generatingPdf.set(false);
     }

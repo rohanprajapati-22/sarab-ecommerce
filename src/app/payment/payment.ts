@@ -12,7 +12,7 @@ import {
 import { OrderResponse } from '../order-service';
 import { PaymentService, PaymentResponse } from '../payment-service';
 import { loadStripe, Stripe, StripeCardElement } from '@stripe/stripe-js';
-import { SnackbarService } from '../snackbar.service';
+import { ToastService } from '../toast.service';
 
 @Component({
   selector: 'app-payment',
@@ -28,7 +28,7 @@ export class Payment implements AfterViewInit, OnDestroy {
   @ViewChild('cardElement', { static: false }) cardElementRef!: ElementRef<HTMLDivElement>;
 
   private paymentService = inject(PaymentService);
-  private snackbar = inject(SnackbarService);
+  private toaster = inject(ToastService);
 
   readonly isPaying = signal<boolean>(false);
   readonly error = signal<string>('');
@@ -61,7 +61,7 @@ export class Payment implements AfterViewInit, OnDestroy {
 
     if (!this.stripe || !this.cardElementRef) {
       this.error.set('Failed to load Stripe. Please refresh and try again.');
-      this.snackbar.error('Failed to load Stripe. Please refresh and try again.');
+      this.toaster.error('Failed to load Stripe. Please refresh and try again.');
       return;
     }
 
@@ -124,7 +124,7 @@ export class Payment implements AfterViewInit, OnDestroy {
             console.error('Stripe confirmation error:', result.error);
             const message = result.error.message || 'Payment failed. Please try again.';
             this.error.set(message);
-            this.snackbar.error(message);
+            this.toaster.error(message);
           } else if (result.paymentIntent && result.paymentIntent.status === 'succeeded') {
             this.paymentService
               .confirmPayment({
@@ -147,19 +147,19 @@ export class Payment implements AfterViewInit, OnDestroy {
                   this.error.set(
                     'Payment succeeded but order update failed. Please contact support.',
                   );
-                  this.snackbar.error('Payment succeeded but order update failed. Please contact support.');
+                  this.toaster.error('Payment succeeded but order update failed. Please contact support.');
                 },
               });
           } else {
             console.error('Unexpected payment intent status:', result.paymentIntent?.status);
             this.error.set('Payment could not be completed. Please try again.');
-            this.snackbar.error('Payment could not be completed. Please try again.');
+            this.toaster.error('Payment could not be completed. Please try again.');
           }
         } catch (stripeErr) {
           this.isPaying.set(false);
           console.error('Stripe confirmCardPayment threw:', stripeErr);
           this.error.set('An error occurred during payment processing. Please try again.');
-          this.snackbar.error('An error occurred during payment processing. Please try again.');
+          this.toaster.error('An error occurred during payment processing. Please try again.');
         }
       },
       error: (err) => {
@@ -174,7 +174,7 @@ export class Payment implements AfterViewInit, OnDestroy {
           return;
         }
         this.error.set(message);
-        this.snackbar.error(message);
+        this.toaster.error(message);
       },
     });
   }

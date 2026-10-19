@@ -1,0 +1,117 @@
+<section class="confirmation-page">
+  <div class="container confirmation-container">
+    @if (loading()) {
+      <div class="confirmation-state" role="status" aria-live="polite">
+        <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+        <h1>Loading your order…</h1>
+        <p>We’re getting your confirmation details.</p>
+      </div>
+    } @else if (error()) {
+      <div class="confirmation-state confirmation-error" role="alert">
+        <span class="state-icon"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i></span>
+        <h1>Order details unavailable</h1>
+        <p>{{ error() }}</p>
+        <div class="confirmation-actions">
+          <button class="confirmation-btn secondary" type="button" (click)="load()">
+            <i class="fas fa-redo" aria-hidden="true"></i> Try again
+          </button>
+          <a class="confirmation-btn primary" routerLink="/">Back to home</a>
+        </div>
+      </div>
+    } @else if (invoice(); as order) {
+      <header class="confirmation-hero" [class.payment-pending]="!paymentComplete">
+        <span class="state-icon">
+          <i class="fas" [class.fa-check]="paymentComplete"
+             [class.fa-clock]="!paymentComplete" aria-hidden="true"></i>
+        </span>
+        @if (paymentComplete) {
+          <p class="eyebrow">Thank you for your order</p>
+          <h1>Order confirmed!</h1>
+          <p class="hero-copy">We’ve received your payment and our team is preparing your food fresh.</p>
+        } @else {
+          <p class="eyebrow">Order received</p>
+          <h1>Payment {{ order.paymentStatus | lowercase }}</h1>
+          <p class="hero-copy">Your order is saved. Check the payment status below before closing this page.</p>
+        }
+        <div class="order-number">
+          <span>Order number</span>
+          <strong>#{{ order.orderId }}</strong>
+        </div>
+      </header>
+
+      <div class="confirmation-grid">
+        <section class="confirmation-card order-card">
+          <div class="card-heading">
+            <div>
+              <p class="eyebrow">Your purchase</p>
+              <h2>Order summary</h2>
+            </div>
+            <span class="status-pill" [class.paid]="paymentComplete">
+              {{ order.paymentStatus }}
+            </span>
+          </div>
+
+          <div class="order-lines">
+            @for (item of order.items; track $index) {
+              <div class="order-line">
+                <div class="item-copy">
+                  <strong>{{ item.productName }}</strong>
+                  <span>Quantity {{ item.quantity }} × {{ money(item.price) }}</span>
+                </div>
+                <strong>{{ money(item.subtotal) }}</strong>
+              </div>
+            }
+          </div>
+
+          <div class="order-total">
+            <span>Total paid</span>
+            <strong>{{ money(order.totalAmount) }}</strong>
+          </div>
+          <p class="invoice-number">Receipt {{ order.invoiceNumber }}</p>
+        </section>
+
+        <section class="confirmation-card delivery-card">
+          <p class="eyebrow">Delivery details</p>
+          <h2>Where it’s going</h2>
+          <div class="delivery-detail">
+            <i class="fas fa-user" aria-hidden="true"></i>
+            <span>{{ order.customerName }}</span>
+          </div>
+          <div class="delivery-detail">
+            <i class="fas fa-envelope" aria-hidden="true"></i>
+            <span>{{ order.email }}</span>
+          </div>
+          <div class="delivery-detail">
+            <i class="fas fa-phone" aria-hidden="true"></i>
+            <span>{{ order.phone }}</span>
+          </div>
+          <div class="delivery-detail">
+            <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+            <span>{{ order.address }}</span>
+          </div>
+          <div class="status-details">
+            <div><span>Order status</span><strong>{{ order.orderStatus }}</strong></div>
+            <div><span>Payment</span><strong>{{ order.paymentStatus }}</strong></div>
+          </div>
+        </section>
+      </div>
+
+      <div class="confirmation-actions">
+        <button class="confirmation-btn primary" type="button"
+                (click)="downloadInvoice()" [disabled]="generatingPdf()">
+          @if (generatingPdf()) {
+            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Preparing PDF…
+          } @else {
+            <i class="fas fa-download" aria-hidden="true"></i> Download invoice PDF
+          }
+        </button>
+        <button class="confirmation-btn secondary" type="button" (click)="print()">
+          <i class="fas fa-print" aria-hidden="true"></i> Print confirmation
+        </button>
+        <a class="confirmation-btn secondary" routerLink="/">
+          <i class="fas fa-utensils" aria-hidden="true"></i> Continue shopping
+        </a>
+      </div>
+    }
+  </div>
+</section>

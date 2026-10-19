@@ -8,14 +8,8 @@
          <button class="btn-back" (click)="goHome()"><i class="fas fa-arrow-left"></i> Continue Shopping</button>
       </div>
 
-      @if (checkoutDone()) {
-         <app-invoice
-            [orderId]="orderResult()?.orderId ?? 0"
-            [order]="orderResult()"
-            [payment]="paymentResult()"
-         />
-      } @else if (showPayment()) {
-         <app-payment [order]="orderResult()!" (paid)="onPaid($event)" (cancel)="cancelPayment()" />
+      @if (showPayment()) {
+         <app-payment [order]="orderResult()!" (paid)="onPaid()" (cancel)="cancelPayment()" />
       } @else if (showCheckout()) {
          <div class="checkout-layout">
             <div class="cart-list">

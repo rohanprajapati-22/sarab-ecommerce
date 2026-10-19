@@ -3,14 +3,12 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { UiService, CartItem } from '../ui.service';
 import { OrderService, CreateOrder, CreateOrderItem, OrderResponse } from '../order-service';
-import { PaymentResponse } from '../payment-service';
 import { Payment } from '../payment/payment';
-import { Invoice } from '../invoice/invoice';
 import { AuthService } from '../auth-service';
-import { SnackbarService } from '../snackbar.service';
+import { ToastService } from '../toast.service';
 
 @Component({
-  imports: [FormsModule, Payment, Invoice],
+  imports: [FormsModule, Payment],
   selector: 'app-cart-page',
   styleUrl: './cart-page.css',
   templateUrl: './cart-page.html',
@@ -18,13 +16,11 @@ import { SnackbarService } from '../snackbar.service';
   encapsulation: ViewEncapsulation.None
 })
 export class CartPage {
-  readonly checkoutDone = signal<boolean>(false);
   readonly showCheckout = signal<boolean>(false);
   readonly showPayment = signal<boolean>(false);
   readonly isPlacing = signal<boolean>(false);
   readonly error = signal<string>('');
   readonly orderResult = signal<OrderResponse | null>(null);
-  readonly paymentResult = signal<PaymentResponse | null>(null);
 
   customer = {
     customerName: '',
@@ -38,7 +34,7 @@ export class CartPage {
     private router: Router,
     private orderService: OrderService,
     private auth: AuthService,
-    private snackbar: SnackbarService
+    private toaster: ToastService
   ) {
     const user = this.auth.user();
     if (user) {
@@ -69,16 +65,20 @@ export class CartPage {
 
   remove(title: string) {
     this.ui.removeItem(title);
+    this.toaster.info(`${title} removed from your cart.`);
   }
 
   clear() {
+    if (!this.ui.cartItems().length) return;
     this.ui.clearCart();
+    this.toaster.info('Your cart has been cleared.');
   }
 
   proceedToCheckout() {
     this.error.set('');
     
     if (!this.auth.isAuthenticated()) {
+      this.toaster.info('Please log in to continue to checkout.');
       this.router.navigate(['/login'], { queryParams: { return: '/cart' } });
       return;
     }
@@ -147,22 +147,24 @@ export class CartPage {
         this.orderResult.set(res);
         this.ui.clearCart();
         this.showPayment.set(true);
-        this.snackbar.success(`Order #${res.orderId} placed! Complete payment to confirm.`);
+        this.toaster.success(`Order #${res.orderId} placed! Complete payment to confirm.`);
       },
       error: (err) => {
         this.isPlacing.set(false);
         const message = err?.error?.message || 'Unable to place your order. Please try again.';
         this.error.set(message);
-        this.snackbar.error(message);
+        this.toaster.error(message);
       },
     });
   }
 
-  onPaid(res: PaymentResponse) {
-    this.paymentResult.set(res);
-    this.checkoutDone.set(true);
+  onPaid(): void {
     this.showPayment.set(false);
-    this.snackbar.success('Payment successful! Your order is confirmed.');
+    this.toaster.success('Payment successful! Your order is confirmed.');
+    const orderId = this.orderResult()?.orderId;
+    if (orderId) {
+      this.router.navigate(['/order-confirmation', orderId]);
+    }
   }
 
   goHome() {
@@ -178,10 +180,13 @@ export class CartPage {
         orderStatus: 'Cancelled',
       }).subscribe({
         next: () => {
-          this.snackbar.info(`Order #${res.orderId} has been cancelled.`);
+          this.toaster.info(`Order #${res.orderId} has been cancelled.`);
           this.goHome();
         },
-        error: () => this.goHome(),
+        error: () => {
+          this.toaster.error('We could not update the order cancellation. Please contact support.');
+          this.goHome();
+        },
       });
       return;
     }

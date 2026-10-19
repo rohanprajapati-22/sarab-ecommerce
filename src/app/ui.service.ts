@@ -39,6 +39,7 @@ export class UiService {
   readonly galleryItems = signal<GalleryItem[]>([]);
   readonly galleryIndex = signal<number>(0);
   readonly cartItems = signal<CartItem[]>([]);
+  readonly menuSearchQuery = signal<string>('');
   readonly cartCount = computed<number>(() =>
     this.cartItems().reduce((sum, ci) => sum + ci.qty, 0)
   );

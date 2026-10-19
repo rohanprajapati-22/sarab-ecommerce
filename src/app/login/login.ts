@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService, LoginRequest } from '../auth-service';
+import { ToastService } from '../toast.service';
 
 @Component({
   imports: [FormsModule, RouterLink, ReactiveFormsModule],
@@ -21,6 +22,7 @@ export class Login implements OnInit {
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
+    private toaster: ToastService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -60,6 +62,7 @@ export class Login implements OnInit {
 
       next: () => {
         this.submitting.set(false);
+        this.toaster.success('You are now logged in.');
         const target =
           this.redirectTo === '/' && this.auth.isAdmin()
             ? '/admin'

@@ -191,9 +191,9 @@
    type="button"
    class="btn-red w-100 justify-content-center"
    (click)="reserve()"
-   [disabled]="isReserving">
+   [disabled]="isReserving()">
 
-   @if (isReserving) {
+   @if (isReserving()) {
       <i class="fas fa-spinner fa-spin"></i>
       Booking...
    }
@@ -214,10 +214,4 @@
          </div>
       </div>
    </div>
-   @if (ok) {
-      <div class="reservation-snackbar" role="status" aria-live="polite">
-         <i class="fas fa-check-circle" aria-hidden="true"></i>
-         <span>Reservation request sent! We'll confirm via email shortly.</span>
-      </div>
-   }
 </section>
