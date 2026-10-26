@@ -8,6 +8,8 @@ import { AdminLogin } from './admin/admin-login';
 import { OrdersList } from './admin/orders/orders-list';
 import { OrderDetails } from './admin/orders/order-details';
 import { MenuManagement } from './admin/menu/menu-management';
+import { ContactsList } from './admin/contacts/contacts-list';
+import { ReservationsList } from './admin/reservations/reservations-list';
 import { adminGuard } from './admin/admin.guard';
 import { OrderConfirmation } from './order-confirmation/order-confirmation';
 
@@ -26,6 +28,8 @@ export const routes: Routes = [
       { path: 'orders', component: OrdersList },
       { path: 'orders/:id', component: OrderDetails },
       { path: 'menu', component: MenuManagement },
+      { path: 'contacts', component: ContactsList },
+      { path: 'reservations', component: ReservationsList },
     ],
   },
   { path: 'admin/login', component: AdminLogin },

@@ -21,6 +21,17 @@ function isAdminEndpoint(req: HttpRequest<unknown>): boolean {
     return true;
   }
 
+  // The public storefront form POSTs to /api/Contact; only the admin panel
+  // reads/deletes saved messages, so any non-POST call needs the admin session.
+  if (url.includes('/api/Contact') && method !== 'POST') {
+    return true;
+  }
+
+  // Same pattern for reservations.
+  if (url.includes('/api/Reservation') && method !== 'POST') {
+    return true;
+  }
+
   if (url.startsWith('/api/Invoice') || url.includes('/api/Invoice')) {
     return true;
   }

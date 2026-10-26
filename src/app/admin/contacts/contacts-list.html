@@ -1,0 +1,154 @@
+<div class="admin-card">
+  <div class="admin-card-head">
+    <div>
+      <h2 class="admin-card-title">Contact Messages</h2>
+      <p class="admin-card-sub">Enquiries submitted through the storefront contact form</p>
+    </div>
+
+    @if (contacts().length) {
+      <span class="admin-count-badge">{{ contacts().length }} total</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <div class="admin-empty">
+      <i class="fas fa-spinner fa-spin admin-empty-ico"></i>
+      <p>Loading messages...</p>
+    </div>
+  } @else if (error()) {
+    <div class="admin-empty">
+      <i class="fas fa-exclamation-triangle admin-empty-ico admin-empty-ico-error"></i>
+      <p>{{ error() }}</p>
+      <button class="admin-btn admin-btn-outline" (click)="load()">
+        <i class="fas fa-redo"></i> Retry
+      </button>
+    </div>
+  } @else if (!contacts().length) {
+    <div class="admin-empty">
+      <i class="fas fa-envelope-open admin-empty-ico"></i>
+      <p>No contact messages have been received yet.</p>
+    </div>
+  } @else {
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Sr No.</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Subject</th>
+            <th>Received</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (message of paginatedContacts(); track message.id; let i = $index) {
+            <tr>
+              <td>
+                {{ (currentPage() - 1) * pageSize + i + 1 }}
+              </td>
+
+              <td>
+                <div class="contact-person">
+                  <span class="contact-person-name">{{ message.name }}</span>
+                  @if (message.phone) {
+                    <small>{{ message.phone }}</small>
+                  }
+                </div>
+              </td>
+
+              <td class="contact-email">{{ message.email }}</td>
+
+              <td>{{ message.subject }}</td>
+
+              <td>{{ message.createdAt | date: 'dd MMM yyyy, HH:mm' }}</td>
+
+              <td class="ta-r">
+                <div class="contact-row-actions">
+                  <button class="admin-btn admin-btn-sm" (click)="open(message)">
+                    <i class="fas fa-eye"></i> View
+                  </button>
+                  <button
+                    class="admin-btn admin-btn-danger"
+                    title="Delete message"
+                    (click)="remove(message)"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      @if (totalPages() > 1) {
+        <div class="pagination">
+          <button
+            class="pagination-btn"
+            [disabled]="currentPage() === 1"
+            (click)="previousPage()"
+          >
+            <i class="fas fa-chevron-left"></i>
+          </button>
+
+          @for (page of pageNumbers(); track page) {
+            <button
+              class="pagination-btn"
+              [class.active]="currentPage() === page"
+              (click)="goToPage(page)"
+            >
+              {{ page }}
+            </button>
+          }
+
+          <button
+            class="pagination-btn"
+            [disabled]="currentPage() === totalPages()"
+            (click)="nextPage()"
+          >
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+@if (selected(); as message) {
+  <div class="contact-modal-backdrop" (click)="close()">
+    <div class="contact-modal" (click)="$event.stopPropagation()">
+      <div class="contact-modal-head">
+        <h3>{{ message.subject }}</h3>
+        <button class="contact-modal-close" (click)="close()" aria-label="Close">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="contact-modal-meta">
+        <div><i class="fas fa-user"></i> {{ message.name }}</div>
+        <div>
+          <i class="fas fa-envelope"></i>
+          <a [href]="'mailto:' + message.email">{{ message.email }}</a>
+        </div>
+        @if (message.phone) {
+          <div><i class="fas fa-phone"></i> {{ message.phone }}</div>
+        }
+        <div>
+          <i class="fas fa-clock"></i>
+          {{ message.createdAt | date: 'dd MMM yyyy, HH:mm' }}
+        </div>
+      </div>
+
+      <div class="contact-modal-body">{{ message.message }}</div>
+
+      <div class="contact-modal-foot">
+        <button class="admin-btn admin-btn-danger" (click)="remove(message)">
+          <i class="fas fa-trash"></i> Delete
+        </button>
+        <button class="admin-btn admin-btn-outline" (click)="close()">Close</button>
+      </div>
+    </div>
+  </div>
+}
